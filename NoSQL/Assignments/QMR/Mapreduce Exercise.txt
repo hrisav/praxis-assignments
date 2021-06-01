@@ -1,0 +1,15 @@
+Insert the following marks for each subject for 3 students Midhu, Akhil and Anish
+
+
+db.students.insert({"name" : "Midhu", "subject" : "science", "marks" : 68});
+db.students.insert({ "name" : "Midhu", "subject" : "maths", "marks" : 98 });
+db.students.insert({ "name" : "Midhu", "subject" : "sports", "marks" : 77 });
+db.students.insert({ "name" : "Akhil", "subject" : "science", "marks" : 67 });
+db.students.insert({ "name" : "Akhil", "subject" : "maths", "marks" : 87 });
+db.students.insert({ "name" : "Akhil", "subject" : "sports", "marks" : 89 });
+db.students.insert({ "name" : "Anish", "subject" : "science", "marks" : 67 });
+db.students.insert({ "name" : "Anish", "subject" : "maths", "marks" : 78 });
+db.students.insert({ "name" : "Anish", "subject" : "sports", "marks" : 90 });
+
+Exercise: Show Total Marks for Each student in a collection named "totals"
+

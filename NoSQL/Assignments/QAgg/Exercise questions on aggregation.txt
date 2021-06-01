@@ -1,0 +1,15 @@
+Use collection "transactions" created by importing "transactions.json" on day 2
+
+
+# 1. Calculate the total transaction amount by aggregating Payment.Total in all records
+
+
+# 2. Aggregate per record by aggregating Transaction.price
+
+
+# 3. Aggregate per payment type by adding up Payment.Total
+
+
+# 4. Find the max id
+
+# 5. Find the max Transaction.price
