@@ -1,0 +1,462 @@
+Analytics Tools & Techniques for Decision Making
+========================================================
+author: Prof Sourav Saha
+date: 
+width: 1280
+height: 800
+
+
+Principles of Data Science with R
+========================================================
+- Understand the Problem
+- Create outline for the Solution
+- Capture Data
+- Visualize Data
+- Build viable prototype
+- Run the experiment
+- Evaluate your prototype
+- Extend to the entire solution
+- Interpret
+
+
+
+Sampling using R
+===================================
+## Sampling with and without replacement
+```{r}
+## Sample of 4 numbers from a List without Replacement
+sample(c(1,3,5,7),size=4,replace = FALSE)
+
+## Sample of 4 numbers from a list with Replacement
+sample(c(1,3,5,7),size=4,replace = TRUE)
+```
+
+Random number from a sequence using R
+===================================
+## Using uniform distribution
+```{r}
+## Sample of 40 numbers from a list between 20 to 60
+runif(40,20,60)
+
+## Sample of 40 integers from a list between 20 to 60
+round(runif(40,20,60))
+```
+
+
+Principles of Data Science with R
+========================================================
+- Capture Data
+
+```{r}
+die1 = c(1,2,3,4,5,6)
+die2 = c(1:6)
+die3 = seq(1,6,1)
+die1 + die2
+sum(sample(die1,6,replace=TRUE))
+
+```
+
+
+R - logical operations on list
+============================================
+```{r}
+
+vList = seq(5,100,5)
+
+vList > 50
+
+```
+
+R - Subsetting a list
+============================================
+```{r}
+
+vList = seq(5,100,5)
+
+vNewList = vList[vList>50]
+
+print(vNewList)
+
+```
+
+R - Subsetting a list
+============================================
+```{r}
+
+vList = seq(5,100,5)
+
+vNewList = vList>25 & vList<75
+
+print(vNewList)
+
+```
+
+R - logical operations on list
+============================================
+```{r}
+
+vList = seq(5,100,5)
+
+vNewList = vList[vList>25 & vList<75]
+
+print(vNewList)
+
+```
+
+R - logical operations on list
+============================================
+```{r}
+
+vList = seq(5,100,5)
+
+vNewList = vList[!(vList>25 & vList<75)]
+
+print(vNewList)
+
+```
+
+
+Manipulating R vectors
+============================================
+## Adding some elements at the end of the Vector
+```{r}
+vVector = c(1:30)
+print(vVector)
+
+vOtherVector = seq(32,60,2)
+print(vOtherVector)
+
+vNewVector = c(vVector,vOtherVector)
+print(vNewVector)
+
+```
+
+Manipulating R vectors
+============================================
+## Adding some elements at the end of the Vector
+```{r}
+
+vNewVector = c(vVector,vOtherVector)
+print(vNewVector)
+
+vNewVector = append(vVector,vOtherVector)
+print(vNewVector)
+
+```
+
+
+Manipulating R vectors
+============================================
+## Adding some elements in the middle of the vector
+```{r}
+vVector = seq(1,50,2)
+
+vOtherVector = seq(32,60,2)
+
+vNewVector = append(vVector,vOtherVector,after=15)
+print(vNewVector)
+
+```
+
+Manipulating R vectors
+============================================
+## Modifying the vector
+```{r}
+vNewVector = append(vVector,vOtherVector)
+
+vNewVector[6] = 12
+print(vNewVector)
+
+```
+
+
+Manipulating R vectors
+============================================
+## Modifying the vector at position
+```{r}
+vVector = seq(1,100,2)
+print(vVector)
+
+nLoc = which(vVector==39)
+
+vVector[nLoc] = 40
+
+print(vVector)
+
+```
+
+Manipulating R vectors
+============================================
+## Modifying the vector at position
+```{r}
+vVector = seq(1,100,2)
+print(vVector)
+
+nLocList = which(vVector>39)
+
+print(nLocList)
+
+vNewVector = vVector[-nLocList]
+
+print(vNewVector)
+
+```
+
+Manipulating R vectors
+============================================
+## Modifying the vector at position
+```{r}
+vVector = seq(1,100,2)
+print(vVector)
+
+nLocList = which(vVector %in% 39:61)
+
+print(nLocList)
+
+vNewVector = vVector[-nLocList]
+
+print(vNewVector)
+
+```
+
+Manipulating R vectors
+============================================
+## Modifying the vector at position
+```{r}
+vVector = seq(1,100,2)
+print(vVector)
+
+nLocList = which(vVector %in% c(39,41,43,47,49))
+
+print(nLocList)
+
+```
+
+Manipulating R vectors
+============================================
+## Modifying the vector at position
+```{r}
+vVector = seq(1,100,2)
+print(vVector)
+
+vVector = vVector[-which(vVector %in% c(39,41,43,47,49))]
+
+print(vVector)
+
+```
+
+Manipulating R vectors
+============================================
+## Delete the last 10 elements
+```{r}
+vVector = seq(1,100,2)
+print(vVector)
+
+vNewVector = vVector[-c(41:50)]
+
+print(vNewVector)
+
+```
+
+
+Creating a list with repeated values
+========================================================
+- List with Repeats
+```{r}
+# A vector of 10 elements all zeros
+rep(0,10)
+
+# A vector of 20 elements, all 50s
+rep(50,20)
+
+```
+
+Class Problems - startup Salary
+===================================
+## You are the owner of a startup in Bangalore. All the employees who joined the startup were offered an initial salary of INR 100,000 and bonus was promised depending on the amount of time they stayed till the startup had raised fund. The startup had 50 employees in the first year where every second employee was a female. All the first 50 employees were given a 10% pay hike at end of 1st year. During the 2nd year 100 more had joined the startup at the same base salary. At the end of the 2nd year, the startup received USD 5M as Series A funding. Post the funding, as promised there was a huge hike in salary as per the conditions below:
+## - First 10 employees got 10 times raise
+## - 11th to 50th employee received on average 5 times pay hike, whereby the males got a 4.9 times raise and the females got 5.1 times raise to show more empowerment to women
+## - The next 50 employees got their salaries doubled
+## - The 101st to 130th employee got between 20% to 40% hike
+## - The 131st to 150th employee got increase in salary of Rs 15,000 and Rs 18,000 being more for the females who were the even numbered employees
+## With the above information, prepare the final salary sheet for the employees. Find the average salary and the standard deviation in the organization. Is there any correlation to the employee number. What proportion of employees 2 Lakhs or more as salary
+
+Class Problems - startup Salary
+===================================
+## - First 10 employees got 10 times raise
+## - 11th to 50th employee received on average 5 times pay hike, whereby the males got a 4.9 times raise and the females got 5.1 times raise to show more empowerment to women
+## - The next 50 employees got their salaries doubled
+## - The 101st to 130th employee got between 20% to 40% hike
+## - The 131st to 150th employee got increase in salary of Rs 15,000 and Rs 18,000 being more for the females who were the even numbered employees
+## With the above information, prepare the final salary sheet for the employees. Find the average salary and the standard deviation in the organization. Is there any correlation to the employee number. What proportion of employees 2 Lakhs or more as salary
+
+
+Solution methodology
+========================================================
+- Understand the Problem
+- Create outline for the Solution
+- Capture Data
+- Build viable prototype
+- Run the experiment
+- Evaluate your prototype
+- Extend to the entire solution
+
+
+Startup Salary - 1
+========================================================
+- Define all the employees
+```{r}
+# Creating a list of all the employees
+nEmployees = c(1:150)
+vEmpSalary = rep(100000,150)
+
+```
+
+Startup Salary - 2
+========================================================
+- Define all the employees
+```{r}
+# Salary at the end of Year 1
+vEmpSalary[1:50] = vEmpSalary[1:50]*1.10
+
+print(vEmpSalary)
+
+```
+
+Startup Salary - 3
+========================================================
+- Define all the employees
+```{r}
+# Founders got 10 times raise
+vEmpSalary[1:10] = vEmpSalary[1:10]*10
+
+print(vEmpSalary)
+
+```
+
+Startup Salary - 4
+========================================================
+- Define all the employees
+```{r}
+# Female employess got 5.1 times hike while males got 4.9
+vEmpSalary[11:50] = vEmpSalary[11:50]*c(4.9,5.1)
+
+print(vEmpSalary)
+
+```
+
+Startup Salary - 5
+========================================================
+- Define all the employees
+```{r}
+# The 51st to 100th Employee doubled their salaries
+vEmpSalary[51:100] = vEmpSalary[51:100]*2
+
+print(vEmpSalary)
+
+```
+
+Startup Salary - 6
+========================================================
+- Define all the employees
+```{r}
+# Uniformaly changing the Salary values
+vEmpSalary[101:130] = vEmpSalary[101:130]*runif(30,1.2,1.4)
+
+print(vEmpSalary)
+
+```
+
+Startup Salary - 7
+========================================================
+- Define all the employees
+```{r}
+# Even employees got 15,000 raise while odd employees got 18,000 raise
+vEmpSalary[131:150] = vEmpSalary[131:150] + c(15000, 18000)
+
+print(vEmpSalary)
+
+```
+
+Startup Salary - 8
+========================================================
+- Descriptive Statistics
+```{r}
+# Creating the mean salary
+vMeanSalary = mean(vEmpSalary)
+
+# Creating the Standard Deviation of the Salary
+vSDSalary = sd(vEmpSalary)
+
+# Finding the correation with the employee number
+
+vCorEmp = cor(nEmployees,vEmpSalary)
+
+print(paste("The mean Salary is",vMeanSalary,"and the standard deviation is",vSDSalary, "with a correlation of",vCorEmp,sep= ' * '))
+
+```
+
+Startup Salary - 9
+========================================================
+- Getting the proportions
+```{r}
+nMorethan2L = length(which(vEmpSalary >= 200000))
+
+vProp = nMorethan2L/150
+
+print(paste("The more than 2Lakhs proportion is",vProp))
+
+```
+
+
+More Descriptive Statistics
+========================================================
+- Descriptive Statistics
+```{r}
+summary(vEmpSalary)
+
+#install.packages(e1071)
+library(e1071)
+
+vSkewness = skewness(vEmpSalary)
+
+vKurtosis = kurtosis(vEmpSalary)
+
+print(paste("The Skewness is",vSkewness,"and the Kurtosis value is",vKurtosis))
+
+```
+
+
+Basic Plotting
+========================================================
+- Histogram
+```{r,echo=TRUE}
+#Draw Histogram
+hist(vEmpSalary)
+
+```
+
+Basic Plotting
+========================================================
+- Box & Whisker Plot
+```{r,echo=TRUE}
+#Draw BoxPlot
+boxplot(vEmpSalary)
+
+```
+
+Basic Plotting
+========================================================
+- Plotting Curve
+```{r,echo=TRUE}
+#Draw Scatter Plot
+plot(vEmpSalary)
+```
+
+Basic Plotting
+========================================================
+- Plotting Curve
+```{r,echo=TRUE}
+#Draw Scatter Plot
+plot(nEmployees,vEmpSalary)
+```

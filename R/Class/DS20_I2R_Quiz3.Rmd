@@ -1,0 +1,138 @@
+Student Details:
+==============================================================================
+Name:
+Roll No:
+Group No:
+
+
+
+Question 1
+==============================================================================
+Create 1000 samples of size 100 each from numbers drawn from an uniform distribution between 300 and 700. Estimate the population mean from the distribution of the sample mean. Draw histogram with breaks of 20.
+Marks 5
+
+
+Solution to Question 1
+=====================================================================
+```{r}
+# Data Containers
+
+# Procedures Used
+
+# Logic
+
+# Answer
+
+sample_1000 = replicate(n=1000, mean(round(runif(n=100,min = 300,max = 700))), simplify=TRUE)
+
+print(mean(sample_1000))
+hist(sample_1000, breaks = 20)
+
+```
+
+Question 2
+==============================================================
+A popular Airlines have observed that the probability of no-show for a customer with confirmed airlines ticket is 0.15. In order to ensure that the seat doesn't go waste, the airlines typically sells 10% more tickets than the number of seats. Eg. For a flight with 100 seats, assuming 15% passengers don't turn up, it sells 110 tickets.
+With the above information, assuming the cancellation follows a Binomial Distribution, find the answers below for a flight with capacity of 200 seats
+a. At-least 190 seats will be filled
+b. All the 210 confirmed passengers will turn up
+Marks 4
+
+Solution to Question 2
+============================================================================================
+```{r}
+# Data Containers
+p=0.85
+N = 200*1.1
+
+# Procedures Used
+
+# Logic
+
+# Answer
+
+#a
+X=c(190:200)
+sum(dbinom(x = X, size = N, prob = p))
+
+#b
+X=210
+dbinom(x = X, size = N, prob = p)
+
+
+```
+
+Question 3
+==============================================================
+The annual number of accidents occuring in a manufacturing plant is known to follow a poisson distribution with mean 12. Find the following
+a. Probability of no accidents in a year
+b. Probabilty of maximum 15 accidents in the year
+Marks 4
+
+Solution to Question 3
+==============================================================================
+```{r}
+# Data Containers
+lda = 12
+
+# Procedures Used
+
+# Logic
+
+# Answer
+#a
+X=0
+dpois(X, lambda = lda)
+
+#b
+X=15
+ppois(X, lambda = lda)
+
+#b
+X=c(0:15)
+sum(dpois(X, lambda = lda))
+
+
+
+```
+
+
+Question 4
+==============================================================
+You would like to attend a theme party and would like to select the clothes from a popular clothes rental store. The rental store shows clothes by colors and themes. The choice of colors are White, Red, Black, Blue, Green, Orange and Yellow. The choice of theme are Gothic, Arabian, Christian and Hindu. The following conditions apply
+a. Gothic theme only has Red and Black as colors
+b. Christian theme has only White and Black as colors
+c. Arabian has Orange, Blue, Green and Black as colors
+d. Hindu has Red, Blue, Orange and Yellow as the color
+
+With the above information and restrictions, determine the total number of possible dress combinations available to you.
+
+Marks 7
+
+Solution to Question 4
+============================================================================================
+```{r}
+# Data Containers
+Pcolor =c("White","Red","Black","Blue","Green","Orange","Yellow")
+Ptheme =c("Gothic","Arabian","Christian","Hindu")
+
+# Procedures Used
+# expand.grid()
+
+# Logic
+
+# Answer
+Gdress = expand.grid(theme="Gothic",color=Pcolor[c(2,3)])
+
+Cdress = expand.grid(theme="Christian",color=Pcolor[c(1,3)])
+
+Adress = expand.grid(theme="Arabian",color=Pcolor[c(3:6)])
+
+Hdress = expand.grid(theme="Hindu",color=Pcolor[c(2,3,6,7)])
+
+Pdress = rbind(Gdress,Cdress,Adress,Hdress)
+
+print(Pdress)
+
+
+```

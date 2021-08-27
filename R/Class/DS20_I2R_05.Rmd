@@ -1,0 +1,372 @@
+Using the Function "match"
+============================================================================================
+- The basic "match" function takes in 2 arguments - a source vector & a vector to be matched
+- Wherever the Source Vector finds the matching vector, it pulls out the Location in the matching vector
+- Wherever there is no match, it shows NA
+- The syntax is as below  match(Source Vector, Vector to be Matched)
+
+
+Matching using R
+===================================
+## Match
+```{r}
+## Defining a Source vector
+v1 = c(1,3,5,7)
+
+## Destination Vector
+v2 = c(3,7)
+
+match(v1,v2,nomatch=FALSE) 
+
+```
+
+Matching using R
+===================================
+## Match
+```{r}
+
+v3 = match(v2,v1, nomatch=FALSE)
+
+print(v3)
+
+```
+
+Matching using R
+===================================
+## Match
+```{r}
+
+v4 = c(7,9,11)
+
+v3 = match(v4,v1)
+
+print(v3)
+
+```
+
+Removing the NAs
+===================================
+## Check for the NA pieces
+```{r}
+
+v3 = match(v1,v2)
+print(v3)
+
+is.na(v3)
+
+v3 = v3[!is.na(v3)]
+
+print(v3)
+
+```
+
+Handling NAs in R
+===================================
+## Check for the NA pieces
+```{r}
+
+v3 = match(v1,v2)
+print(v3)
+
+is.na(v3)
+
+which(!is.na(v3))
+```
+
+Handling NAs in R
+===================================
+## Check for the NA pieces
+```{r}
+
+v3 = match(v1,v2,nomatch=FALSE)
+
+which(v3!=0)
+
+```
+
+Handling NAs in R
+===================================
+## Check for the NA pieces
+```{r}
+
+v3 = match(v1,v2)
+
+which(v3!='NA')
+
+```
+
+Handling NAs in R DataFrame
+===================================
+## - Use na.omit() for DataFrames
+## - Use complete.cases() for DataFrames
+
+
+Class Examples
+===================================
+## - In a throw of 3 dice, what is the theoretical probability and actual proportion of all faces turning out the same value in 1000 throws of the dice
+
+
+Solution 3 dice
+===================================
+## Get the theoretical throws
+```{r}
+## Sample Space
+nSampleSpace = 6^3
+nUsefulCases = 6
+
+vTheoretical = nUsefulCases/nSampleSpace
+
+print(vTheoretical)
+```
+
+Solution 1 dice
+===================================
+## Get the actual throws
+```{r}
+## Sample Space
+vSampleSpace = rep(sample(1:6,size=1),100)
+
+print(vSampleSpace)
+
+```
+
+Introducing a new Function - Replicate
+========================================================
+- The "replicate" function in R runs an operation as specified
+- You need to provide the number of times its desired to run along with the function
+- The output of the function is generally stored in a vector
+- The syntax is as below
+- replicate(Number of Times to Run, Name of the Procedure with parameters)
+
+Solution 1 dice
+===================================
+## Get the actual throws
+```{r}
+## Sample Space
+vSampleSpace = replicate(100,sample(1:6,size=1))
+
+print(vSampleSpace)
+
+```
+
+Tentative Solution 3 dice
+===================================
+## Get the actual throws
+```{r}
+## Sample Space
+nTimes = 1000
+
+vSampleSpace = replicate(nTimes,sum(sample(1:6,size=3,replace=TRUE)))
+vUsefulCase = c(3,6,9,12,15,18)
+
+nUsefulCase = match(vSampleSpace,vUsefulCase, nomatch=0)
+nUsefulCase = nUsefulCase[which(nUsefulCase!=0)]
+
+nActualCase = length(nUsefulCase)
+
+vActual = nActualCase/nTimes
+print(paste("In an actual",nTimes,"throw of dice, probabilty is",vActual,sep=' '))
+
+```
+
+Function
+===================================
+## Get the actual throws
+```{r}
+Get_throw = function(throw_vec)
+{
+  vAllSame = FALSE
+  vAllSame = ((throw_vec[1]==throw_vec[2])&(throw_vec[2]==throw_vec[3]))
+  return(vAllSame)
+}
+
+```
+
+Final Solution 3 dice
+===================================
+## Get the actual throws
+```{r}
+## Sample Space
+nTimes = 1000
+vDice = c(1:6)
+
+vSampleSpace = replicate(nTimes,Get_throw(sample(vDice,size=3,replace=TRUE)))
+
+nActualCase = sum(vSampleSpace)
+
+vActual = nActualCase/nTimes
+print(paste("In an actual",nTimes,"throw of dice, probabilty is",vActual,sep=' '))
+
+```
+
+Class Problems - World cup match
+===================================
+## You are batting strategy coach in the 50 overs cricket world cup for the celebrated Chauka team who wants to ensure a win with the Mauka team as per the following T20 scoring pattern.
+## - First 10 overs, 2 singles, 1 double, a boundary and over boundary in alternate overs, remaining 2 are dot balls
+## - Next 5 overs, 1 single, 2 doubles, 1 boundary, remaining are dot balls
+## - Next 10 overs, 2 singles & 2 doubles in each overs, 1 over-boundary in alternate overs
+## - Next 15 overs, 2 singles and 2 doubles in each over, an alternating over-boundary and a boundary every 3 overs starting 27th over, remaining all dot balls
+##  Last 10 overs, 1 single, 2 doubles, 1 dot ball, 1 triplet, alternate overs boundaries & boundaries
+## How many dot balls were there
+## How many overboundaries were there
+## How many doubles were there
+
+Class Problems - World cup match
+===================================
+
+## Find the overall tally of:
+## How many dot balls were there
+## How many overboundaries were there
+## How many doubles were there
+
+Matrix
+========================================================
+-  2 dimensional Vector
+-  Created from a single Vector only
+
+
+Defining a Matrix for the Cricket Match
+========================================================
+-  Define the ball-by-ball Vector first
+```{r}
+nOver = 1:6
+
+nBall = rep(nOver,50)
+
+print(length(nBall))
+
+```
+
+Defining the score matrix from Vector
+========================================================
+-  
+```{r}
+
+vScoreMatrix = matrix(nBall,nrow=50,ncol=6)
+
+vScoreMatrix
+```
+
+Defining the score matrix by Column arrangement
+========================================================
+-  
+```{r}
+
+vScoreMatrix = matrix(nBall,byrow=TRUE,nrow=50,ncol=6)
+
+vScoreMatrix
+```
+
+
+Defining a Matrix for the Cricket Match
+========================================================
+-  Initializing the values to 0
+```{r}
+
+nBall[1:300] = 0
+
+# Defining the column names
+cnames = c("Bowled 1","Bowled 2","Bowled 3","Bowled 4","Bowled 5","Bowled 6")
+
+rnames = seq(1,50,1)
+
+```
+
+Adding COlumn names to the Score Matrix
+========================================================
+-  
+```{r}
+
+vScoreMatrix = matrix(nBall,byrow=TRUE,nrow=50,ncol=6, dimnames=list(rnames,cnames))
+
+vScoreMatrix
+```
+
+
+Constructing the row names for the Score matrix
+========================================================
+```{r}
+
+nBall[1:300] = 0
+
+# Defining the column names
+cnames = c("Bowled 1","Bowled 2","Bowled 3","Bowled 4","Bowled 5","Bowled 6")
+
+rnames = seq(1,50,1)
+
+rnames[1:50] = paste("Over-",rnames[1:50])
+
+print(rnames)
+
+```
+
+Defining the score matrix with proper Row Names & Col Names
+========================================================
+-  
+```{r}
+
+vScoreMatrix = matrix(nBall,byrow=TRUE,nrow=50,ncol=6, dimnames=list(rnames,cnames))
+
+vScoreMatrix
+```
+
+Slicing the Score Matrix by Row
+========================================================
+-  
+```{r}
+
+print(vScoreMatrix[1:5,])
+
+```
+
+Accessing the score matrix by Row & Column
+========================================================
+-  
+```{r}
+
+print(vScoreMatrix[1:5,4:6])
+
+```
+
+
+
+
+
+
+
+Principles of Data Science with R
+========================================================
+- Understand the Problem
+- Create outline for the Solution
+- Capture Data
+- Visualize Data
+- Build viable prototype
+- Run the experiment
+- Evaluate your prototype
+- Extend to the entire solution
+- Interpret
+
+Problem 3 - The Drunk Casino Owner
+========================================================
+You are celebrating a successful summer internship at a Casino with 5 other friends. Incidentally it was the owner's birthday and he came to your table and offered drinks. The six of you had 10 shots each with the owner merrily before he belted out an offer.
+
+"I like you guys - let's play a game to make this evening more memorable. Each of the shots you took costs $10. Select any 3 numbers of your choice between 6 and 36 and all six of you roll a die, once for each of the shots. If the combined sum from the 6 dice matches any of your 3 chosen numbers, I agree to pay you $1000 for the throw and drink is on the house. If otherwise, you pay me $20 as the price per shot. Think about it and I will send Nina for confirmation"
+
+While you were discussing possibilities, the beautiful hostess Nina came to your table. You became more confused when with a mysterious smile she said " I suggest you test your luck on a 34, 26 and 36 ". Enchanted by her charm, you all readily agreed to the offer and Nina walked away.
+
+Given you are the only one trained in Data Analytics in the team - deduce if the Casino owner was playing fair?
+(Inspired from real-life incident - don't get stuck on Nina)
+
+
+What business impact the problem has?
+========================================================
+- You stand a chance to lose money
+- There is also a window to make some money
+- Assess your chances of Win vs Lose
+
+What should be your stance
+========================================================
+- Evaluate the cases where you stand to lose
+- Evaluate the probability of the losses
+- Calculate the expected value
+

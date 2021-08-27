@@ -1,0 +1,137 @@
+Analytics Tools & Techniques for Decision Making
+========================================================
+author: Prof. Sourav  Saha
+date: 
+autosize: false
+width: 1280
+height: 800
+
+
+
+Principles of Data Science with R
+========================================================
+- Understand the Problem
+- Create outline for the Solution
+- Capture Data
+- Visualize Data
+- Build viable prototype
+- Run the experiment
+- Evaluate your prototype
+- Extend to the entire solution
+- Interpret
+
+Class Quiz - Problem 1
+================================================
+The celebrated diamond merchant Mr. Hira took a pledge to get 100 orphaned girls get married every year given they are over the age of 21 and had completed graduation. Every marriage he sponsors, he gives away INR 5 Lakhs as usual amount. Every 10th marriage, he gives away double the usual amount. For every 25th marriage, he gives away an extra INR 10 Lakhs over the sanctioned amount as per the above 2 rules. 
+- Write a small R program to represent the problem (all figures in Lakhs)
+- Clearly write the different data containers and logic you need to use
+- What was the average amount Mr. Hira had spent per marriage
+- Given that the pledge is 10% of his revenue from business, determine Mr. Hira's projected revenue from the diamond business
+
+
+Data Containers to Problem 1 
+================================================
+```{r}
+
+nMarriages = 100
+
+# Defining the number of cases
+nCases = c(1:nMarriages)
+
+# Initializing the budget to 0
+vBudget = rep(0,nMarriages)
+
+```
+
+Procedure to Problem 1 
+================================================
+```{r}
+
+vBudget[1:nMarriages] = 5
+
+vBudget[seq(10,nMarriages,10)] = vBudget[seq(10,nMarriages,10)]*2
+
+vBudget[seq(25,nMarriages,25)] = vBudget[seq(25,nMarriages,25)] + 10
+
+
+```
+
+Solution to Problem 1 
+================================================
+```{r}
+
+print(paste("The average amount that Mr. Hira spent per marriage is Rupees",mean(vBudget), "Lakhs",sep=" "))
+
+print(paste("The Revenue from Diamond business is Rupees",sum(vBudget)/0.1,"Lakhs",sep=" "))
+
+```
+
+Problem 2
+================================================
+Chunilal is a small-time thief. Analyzing his previous year's performance, he found that he had 25% chance of getting caught, 60% chance of getting away and 15% chance of a bumper loot during his quests. He manages about INR 10,000 per loot and INR 50,000 from a bumper. Whenever he is caught, he had to shell out INR 30,000 as bribe to the police.
+- Write a small R program to represent the above problem given that Chunilal has planned 100 outings this year
+- Make sure to have placeholders for data containers and clear logics 
+- What is his expected gain (or loss) in the year that can be deduced from above
+- Additionally overriding the above logic, he returns with empty hand (INR 0 gain) every 13th venture, find the revised expected values.
+
+Data Containers to Problem 2 
+================================================
+```{r}
+
+nOutings = 100
+
+vOutings = c("C","L","B")
+pOutings = c(0.25, 0.60, 0.15)
+
+```
+
+Solution to Problem 2a 
+================================================
+```{r}
+
+vActuals = sample(vOutings,size = nOutings,replace = TRUE,prob = pOutings)
+
+nCaught = sum(vActuals=="C")
+nLoots = sum(vActuals=="L")
+nBumper = sum(vActuals=="B")
+
+vExpected = nCaught*(-30000) + nLoots*(10000) + nBumper*(50000)
+
+print(paste("Chunilal's total expected value was",vExpected,sep=" "))
+
+```
+
+
+Solution to Problem 2b 
+================================================
+```{r}
+
+# Getting the empty positions
+#print(nOutings%%13==0)
+
+pEmpty = which(nOutings%%13==0)
+
+vActuals[pEmpty] = "E"
+
+nCaught = sum(vActuals=="C")
+nLoots = sum(vActuals=="L")
+nBumper = sum(vActuals=="B")
+nEmpty = sum(vActuals=="E")
+
+vExpected = nCaught*(-30000) + nLoots*(10000) + nBumper*(50000) + nEmpty*(0)
+
+print(paste("Chunilal's revised expected value was",vExpected,sep=" "))
+
+```
+
+
+Assignment - Using Analytics to help in Annual Planning
+===============================================================
+An IVF Hospital Chain with a nationwide capacity of 1000 patients per month and 100 patients per center have been instructed to do annual revenue planning. As part of the same, they are analyzing patient footfalls and profits.
+
+The chain follows a package pricing system. They makes $1000 profit per baby born, $200 for a twin, $-1000 for a triplet and $-2000 when it is a quadruplet. It makes no profit when there is a miscarriage.
+
+The average footfall per month follows an uniform distribution between 72 to 84 per center. Analyzing the data from the past, you found there is a 25% chance of twin, 5% chance for a triplet, 1% chance of a quadruplet and 4% chance of miscarriage.
+
+Given the CEO wants a detailed projection, can you help the IVF chain?
+

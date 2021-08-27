@@ -1,0 +1,228 @@
+Problem Statement
+==================================================================================
+A noted educational institute SNSM had set up a new campus in economically challenged areas in South India in 2010. The institute boasts of good infrastructure and a great leadership vision. It plans to change the educational scenario for the underprivileged and convert itself to an University. The key information which are being reported to the University Controlling Body for its University Status are Total Students, Female Students, Male Students, BPL Students, APL Students and Percentage change from Last Year. (BPL = below poverty line, APL = above poverty line)
+
+The estimated total students when SNSM first started operation was 100. Every year the Total Number of students have been seen to increase as per a uniform distribution between 28 and 35 percent. When the institute had setup in 2010, the Female to Male ratio was 1:4.  Every year there is a change in the number of Females by -7%, -3%, -1%, 1%, 3% and 7% with equal probability. 
+
+When it started in 2010, there were only 20% students from the BPL category. However, due to the good work in part of the government and the institute authority, the BPL category students is increasing by 4% every year and as of now in 2020 stands at 60% of the overall student number. 
+
+With all the above details, create the logic to replicate the numbers using a computer program like R or Python using Data Frames. Due to the University accreditation process, SNSM is interested in knowing the total students, total female and total male students enrolled in 2018, 2019 and 2020. Can you report the all the numbers for Total Students, BPL Students, APL Students for the 3 years.
+Plot the output for the Female student vs the Male students using a line graph and a scatterplot over the years
+
+Understanding the data Containers
+=====================================
+```{r}
+# Data Containers
+YearsOfOperation = c(2010:2020)
+
+MaleStudents = rep(0,11)
+FemaleStudents = rep(0,11)
+TotalStudents = rep(0,11)
+APLStudents = rep(0,11)
+BPLStudents = rep(0,11)
+PctChange = rep(0,11)
+
+```
+
+Getting the data in a Data Frame
+=====================================
+```{r}
+UnivStudents = data.frame(YearsOfOperation,TotalStudents,MaleStudents,FemaleStudents,PctChange,APLStudents,BPLStudents)
+
+
+```
+
+Student percentage changes allocation
+=====================================
+```{r}
+
+UnivStudents$PctChange = runif(n=11,min = 0.28, max = 0.35)
+UnivStudents$PctChange[YearsOfOperation==2010] = 0
+
+UnivStudents$PctChange = 1 + UnivStudents$PctChange
+
+#print(UnivStudents)
+
+```
+
+Total Student Estimation
+=====================================
+```{r}
+
+PrevStudents = 100
+
+for(YOP in YearsOfOperation)
+{
+  UnivStudents$TotalStudents[YearsOfOperation==YOP] = round(PrevStudents*UnivStudents$PctChange[YearsOfOperation==YOP])
+  
+  PrevStudents = UnivStudents$TotalStudents[YearsOfOperation==YOP]
+}
+
+#print(UnivStudents)
+
+```
+
+Female Student Allocation
+=====================================
+```{r}
+
+UnivStudents$PctChange = sample(c(-0.07, -0.03, -0.01, 0.01, 0.03, 0.07),size = 11, replace = TRUE)
+
+UnivStudents$PctChange[YearsOfOperation==2010] = 0
+UnivStudents$PctChange = UnivStudents$PctChange + 1.0
+
+
+PrevFemale = (1/5)*UnivStudents$TotalStudents[YearsOfOperation==2010]
+
+for(YOP in YearsOfOperation)
+{
+  UnivStudents$FemaleStudents[YearsOfOperation==YOP] = round(PrevFemale*UnivStudents$PctChange[YearsOfOperation==YOP])
+  
+  PrevStudents = UnivStudents$TotalStudents[YearsOfOperation==YOP]
+}
+
+
+```
+
+Male Student Allocation
+=====================================
+```{r}
+
+UnivStudents$MaleStudents = UnivStudents$TotalStudents - UnivStudents$FemaleStudents
+
+print(UnivStudents)
+
+
+```
+
+BPL Percentage Allocation
+=====================================
+```{r}
+
+UnivStudents$PctChange = seq(from=20,to=60,by=4)/100
+
+```
+
+
+BPL Allocation
+=====================================
+```{r}
+UnivStudents$BPLStudents = round(UnivStudents$TotalStudents*UnivStudents$PctChange)
+
+#print(UnivStudents)
+
+```
+
+APL Allocation
+=====================================
+```{r}
+UnivStudents$APLStudents = UnivStudents$TotalStudents - UnivStudents$BPLStudents
+
+print(UnivStudents)
+
+```
+
+Printing the required information for 2018 to 2020
+===============================================================
+```{r}
+tail(UnivStudents,3)
+
+```
+
+
+Problem Statement
+==================================================================================
+You are the owner of a travel agency in Sydney that has city bus tours and cruise ship tours. Every day, your business records sales of 90 tickets during the weekdays and 150 tickets during the weekends. 
+
+During the weekday, the number of tickets sold for the bus-tours is twice that of the cruise-ships while on a Weekend the demand of cruise-ships is double that of the bus-tours. On any day when there is a destination wedding in the city, the overall demand for the tickets doubles; However, there is a strong probability of 60% towards the cruise-tickets and 40% for the bus-tickets on those wedding days.
+
+There are 8 planned destination weddings in city during the month of January 2021 though the dates were not known beforehand. Randomly select 8 wedding days and write a small program to estimate the total number of cruise tickets that might be sold on the Wedding days and the total number of bus tickets that might be sold on Weekdays during January 2021.
+
+
+
+
+Understanding the data Containers
+=====================================
+```{r}
+# Data Containers
+DaysOfJan = c(1:31)
+JanWeekends = c(2,3,9,10,16,17,23,24,30,31)
+```
+
+Getting the data in a Data Frame
+=====================================
+```{r}
+TicketSales = data.frame(DaysOfJan)
+
+```
+
+Marking the Weekends
+================================================
+```{r}
+TicketSales$isWeekEnd = ifelse(TicketSales$DaysOfJan %in% JanWeekends,"Y","N")
+```
+
+
+Marking the Wedding Days
+================================================
+```{r}
+
+TicketSales$WeddingDays = "N"
+JanWedding = sample(DaysOfJan, size = 8, replace = FALSE)
+
+TicketSales$WeddingDays[TicketSales$DaysOfJan %in% JanWedding] = "Y"
+
+```
+
+Assessing the total amount of Tickets to be provisioned
+=====================================================================
+```{r}
+TicketSales$TotalSales = ifelse(TicketSales$isWeekEnd=="N", 90, 150)
+
+TicketSales$TotalSales = ifelse(TicketSales$WeddingDays=="Y", 2*TicketSales$TotalSales, TicketSales$TotalSales)
+
+```
+
+
+Assigning the cases for Buses and Cruises for Weekdays & Weekends
+=====================================================================
+```{r}
+
+TicketSales$Buses = ifelse(TicketSales$isWeekEnd=="Y", (1/3)*TicketSales$TotalSales, (2/3)*TicketSales$TotalSales)
+
+TicketSales$Cruises = ifelse(TicketSales$isWeekEnd=="N", (1/3)*TicketSales$TotalSales, (2/3)*TicketSales$TotalSales)
+
+```
+
+Assigning the cases for Buses and Cruises for Wedding Days
+=====================================================================
+```{r}
+
+for(day in DaysOfJan)
+{
+  if(TicketSales$WeddingDays[day]=="Y")
+  {
+    TicketDist = sample(c("Bus","Cruise"), size = TicketSales$TotalSales[day], prob=c(0.4, 0.6), replace = TRUE)
+    
+    TicketSales$Buses[day] = sum(TicketDist=="Bus")
+    TicketSales$Cruises[day] = sum(TicketDist=="Cruise")
+  }
+}
+
+
+```
+
+
+Getting the aggregate information
+======================================================================
+```{r}
+
+#print(TicketSales)
+print(paste("Total Ticket sales is", sum(TicketSales$TotalSales), "in January 2021"))
+
+print(paste("Total Weekday Bus tickets sold is" , sum(TicketSales$Buses[TicketSales$isWeekEnd=="N"])))
+
+print(paste("Total Wedding days cruise ticket sold is ", sum(TicketSales$Cruises[TicketSales$WeddingDays=="Y"])))
+
+```
+

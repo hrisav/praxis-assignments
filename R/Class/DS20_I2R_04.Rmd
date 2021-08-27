@@ -1,0 +1,495 @@
+Analytics Tools & Techniques for Decision Making
+========================================================
+author: Prof Sourav Saha
+date: 
+width: 1280
+height: 800
+
+Principles of Data Science with R
+========================================================
+- Understand the Problem
+- Create outline for the Solution
+- Capture Data
+- Visualize Data
+- Build viable prototype
+- Run the experiment
+- Evaluate your prototype
+- Extend to the entire solution
+- Interpret
+
+Sampling using R
+===================================
+## Sampling with and without replacement
+```{r}
+## Sample of 4 numbers from a List without Replacement
+sample(c(1,3,5,7),size=4,replace = FALSE)
+
+## Sample of 4 numbers from a list with Replacement
+sample(c(1,3,5,7),size=4,replace = TRUE)
+```
+
+
+Example - Application
+===================================
+## In a randomly played 20-20 match find the over by which all the batsman gets bowled
+
+
+Cricket Match using R
+===================================
+## Get the total number of overs and find out a sample of 10
+```{r}
+## Sample of 10 numbers from a list between 1 to 20
+print(paste("The batsman gets out in the following overs", sample(1:20,10,replace=TRUE)))
+
+```
+
+Cricket Match using R
+===================================
+## Get the total number of ball and find out a sample of 10
+```{r}
+## Sample of 10 numbers from a list between 1 to 120
+print(paste("The batsman gets out in the following ball",sample(1:120,10,replace=FALSE)))
+
+```
+
+Cricket Match using R
+===================================
+## Get the total number of overs and find out a sample of 10
+```{r}
+## Sample of 10 numbers from a list between 1 to 20
+nBowled = sample(1:120,10,replace=FALSE)
+print(paste("The batsman gets out in the following balls", sort(nBowled) ))
+
+```
+
+Cricket Match using R
+===================================
+## Which over the last batsman got out
+```{r}
+## Sample of 10 numbers from a list between 1 to 20
+nBowled = sample(1:120,10,replace=FALSE)
+print(paste("The last batsman gets out in the ", 1+max(nBowled)%/%6, "th over."))
+
+```
+
+Cricket Match using R
+===================================
+## Get the total number of overs and find out a sample of 10
+```{r}
+## Sample of 10 numbers from a list between 1 to 20
+nOver = sample(1:120,10,replace=FALSE)
+print(paste("The batsman gets out in the following overs", 1+sort(nOver)%/%6 ))
+```
+
+Writing a Simple Function in R
+========================================================
+```{r}
+Say_Hello = function()
+{
+  print("Hello Class")
+}
+
+Say_Hello()
+```
+
+
+Writing a Function with Parameters
+========================================================
+```{r}
+Say_Hello_P = function(BatchName)
+{
+  BatchHello = paste("Hello Class",BatchName,sep=" ")
+  print(BatchHello)
+}
+
+Say_Hello_P("Data Science")
+```
+
+
+Writing a Function with Parameters
+========================================================
+```{r}
+PrintSquare = function(inputNumber)
+{
+  return(inputNumber^2)
+}
+
+PrintSquare(5)
+```
+
+
+Writing a Function with Parameters
+========================================================
+```{r}
+PrintSpecial = function(inputNumber)
+{
+  myResult =  inputNumber*inputNumber + inputNumber^inputNumber + inputNumber/inputNumber + inputNumber%%inputNumber
+  return(myResult)
+}
+
+PrintSpecial(3)
+```
+
+
+Use of Looping Statements
+========================================================
+- Looping statements allows you to run a loop for a condition
+- Tell the system that you would like to create a loop
+- Initialize the values you would like to work on in the loop
+- Give the terminating condition for the Loop before you enter
+- Put your logic inside the block which you intend to loop
+- Manipulate the Values
+- Check the terminating condition and exit
+
+
+Use of Simple Looping Statements
+========================================================
+```{r}
+mynumber = 5
+while(mynumber < 10)
+{
+  print(" Waiting ")
+  mynumber = mynumber + 1
+}
+```
+
+Showing numbers 1 through 10
+========================================================
+```{r}
+mynumber = 0
+while(mynumber < 10)
+{
+  mynumber = mynumber + 1
+  print(mynumber)
+}
+```
+
+Showing numbers 1 through 10
+========================================================
+```{r}
+mynumber = 1
+while(mynumber <= 10)
+{
+  print(mynumber)
+  mynumber = mynumber + 1
+}
+```
+
+Adding numbers 1 through 10
+========================================================
+```{r}
+mynumber = 0
+mysum = 0
+while(mynumber < 10)
+{
+  mynumber = mynumber + 1
+  mysum = mysum + mynumber
+}
+
+print(mysum)
+
+```
+
+
+
+Class Problems - startup Salary
+===================================
+## You are the owner of a startup in Bangalore. All the employees who joined the startup were offered an initial salary of INR 100,000 and bonus was promised depending on the amount of time they stayed till the startup had raised fund. The startup had 50 employees in the first year where every second employee was a female. All the first 50 employees were given a 10% pay hike at end of 1st year. During the 2nd year 100 more had joined the startup at the same base salary. At the end of the 2nd year, the startup received USD 5M as Series A funding. Post the funding, as promised there was a huge hike in salary as per the conditions below:
+## - First 10 employees got 10 times raise
+## - 11th to 50th employee received on average 5 times pay hike, whereby the males got a 4.9 times raise and the females got 5.1 times raise to show more empowerment to women
+## - The next 50 employees got their salaries doubled
+## - The 101st to 130th employee got between 20% to 40% hike
+## - The 131st to 150th employee got increase in salary of Rs 15,000 and Rs 18,000 being more for the females who were the even numbered employees
+## With the above information, prepare the final salary sheet for the employees. Find the average salary and the standard deviation in the organization. Is there any correlation to the employee number. What proportion of employees 2 Lakhs or more as salary
+
+
+
+
+Startup Salary - 1
+========================================================
+- Define all the employees
+```{r}
+# Creating a list of all the employees
+nEmployees = c(1:150)
+vEmpSalary = rep(100000,150)
+
+```
+
+Startup Salary - 2
+========================================================
+- Define all the employees
+```{r}
+# Creating a list of all the employees
+vEmpSalary[1:50] = vEmpSalary[1:50]*1.10
+
+print(vEmpSalary)
+
+```
+
+Startup Salary - 3
+========================================================
+- Define all the employees
+```{r}
+# Creating a list of all the employees
+vEmpSalary[1:10] = vEmpSalary[1:10]*10
+
+print(vEmpSalary)
+
+```
+
+Startup Salary - 4
+========================================================
+- Define all the employees
+```{r}
+# Creating a list of all the employees
+vEmpSalary[11:50] = vEmpSalary[11:50]*c(4.9,5.1)
+
+print(vEmpSalary)
+
+```
+
+Startup Salary - 5
+========================================================
+- Define all the employees
+```{r}
+# Creating a list of all the employees
+vEmpSalary[51:100] = vEmpSalary[51:100]*2
+
+print(vEmpSalary)
+
+```
+
+Startup Salary - 6
+========================================================
+- Define all the employees
+```{r}
+# Creating a list of all the employees
+vEmpSalary[101:130] = vEmpSalary[101:130]*runif(30,1.20,1.40)
+
+print(vEmpSalary)
+
+```
+
+Startup Salary - 7
+========================================================
+- Define all the employees
+```{r}
+# Creating a list of all the employees
+vEmpSalary[131:150] = vEmpSalary[131:150] + c(15000, 18000)
+
+print(vEmpSalary)
+
+```
+
+Startup Salary - 8
+========================================================
+- Descriptive Statistics
+```{r}
+# Creating the mean salary
+vMeanSalary = mean(vEmpSalary)
+
+# Creating the Standard Deviation of the Salary
+vSDSalary = sd(vEmpSalary)
+
+# Finding the correation with the employee number
+
+vCorEmp = cor(nEmployees,vEmpSalary)
+
+print(paste("The mean Salary is",vMeanSalary,"and the standard deviation is",vSDSalary, "with a correlation of",vCorEmp,sep= ' * '))
+
+```
+
+Startup Salary - 9
+========================================================
+- Getting the proportions
+```{r}
+nMorethan2L = length(which(vEmpSalary >= 200000))
+
+vProp = nMorethan2L/150
+
+print(paste("The more than 2Lakhs proportion is",vProp))
+
+```
+
+
+Data Frames using R
+========================================================
+- Having data in a table structure
+- Multiple rows and columns
+- One unique placeholder
+- Most popular way of getting data into R
+- By default, data read from files gets into Data Frame
+
+
+Defining a Data Frame
+========================================================
+- Get the Rows & Columns
+```{r}
+
+dfEmployees = data.frame(nEmployees, vEmpSalary)
+
+print(dfEmployees)
+```
+
+Accessing the information in Data Frame
+========================================================
+- Get the summary information in the Data Frame
+```{r}
+
+ncol(dfEmployees)
+nrow(dfEmployees)
+
+head(dfEmployees)
+summary(dfEmployees)
+
+```
+
+Accessing the specific column in Data Frame
+========================================================
+- Get the summary information of only Salary
+```{r}
+
+summary(dfEmployees$vEmpSalary)
+
+```
+
+Accessing the specific rows in Data Frame
+========================================================
+- Get the first 10 rows
+```{r}
+
+dfEmployees[c(1:10),]
+
+```
+
+Accessing the details of only female employees
+========================================================
+- Get the first 10 rows
+```{r}
+
+dfFemale = dfEmployees[seq(from = 2, to= 150, by=2),]
+
+print(summary(dfFemale))
+
+
+```
+
+Adding a Column of data in the dataframe
+========================================================
+- Get the summary information of the Salary
+```{r}
+
+EmpAge = round(runif(n=150,21,55))
+dfEmployees = cbind(dfEmployees, EmpAge)
+
+head(dfEmployees)
+
+
+```
+
+Adding a row of data in the dataframe
+========================================================
+- Get the summary information of the Salary
+```{r}
+
+dfEmployees = rbind(dfEmployees, c(151,100000, 35))
+
+ncol(dfEmployees)
+nrow(dfEmployees)
+
+```
+
+Manipulating the row in the  dataframe
+========================================================
+- Get the summary information of the Salary
+```{r}
+
+dfEmployees$vEmpSalary[151] = 90000
+
+print(dfEmployees)
+
+```
+
+Deleting the row in the  dataframe
+========================================================
+- Use the index to delete rows
+```{r}
+
+dfEmployees = dfEmployees[-140,]
+
+nrow(dfEmployees)
+
+print(dfEmployees)
+
+```
+Class Example - Sampling using R
+===================================
+## - Find a list of 10 numbers from 1 to 100
+## - Find a list of 10 even numbers from 200 to 300
+## - From the throw of 2 dice, give the output sum
+
+
+Sampling with Probability
+===================================
+## Sampling with and without replacement
+```{r}
+## Sample without Replacement using Probability
+sample(c(1,3,5,7),size=4,replace = FALSE, prob=c(0.1,0.4,0.3,0.2))
+
+## Sample with Replacement using Probability
+sample(c(1,3,5,7),size=40,replace = TRUE,prob=c(0.1,0.7,0.1,0.1) )
+```
+
+Counting the number of occurances
+===================================
+```{r}
+## Sample with Replacement using Probability
+nVal = sample(c(1,3,5,7),size=40,replace = TRUE,prob=c(0.1,0.7,0.1,0.1) )
+sum(nVal==3)
+
+```
+
+
+Class Examples
+===================================
+
+## - You win 40$ when tail comes and lose 10$ when head comes in a toss of coin. What is the theoretical gain and actual gain in a 1000 toss of an unfair coin that has got 80% head probability
+
+## - Home Problem -# In a throw of 3 dice, what is the theoretical probability and actual proportion of all faces turning out the same value in 1000 throws of the dice
+
+
+Coin Tossing simple solution
+===================================
+## Get the actual throws
+```{r}
+## Sample Space
+nTimes = 1000
+vToss = c("H","T")
+pToss = c(0.8,0.2)
+
+vSampleSpace = sample(vToss,size=nTimes,replace=TRUE,prob=pToss)
+
+nHeads = sum(vSampleSpace=="H")
+nTails = sum(vSampleSpace=="T")
+
+vGain = nHeads*(-10) + nTails*(40)
+print(paste("In an actual",nTimes,"toss of coin, amount realized is",vGain,sep=' '))
+
+```
+
+Coin Tossing quick solution
+===================================
+## Get the actual throws
+```{r}
+## Sample Space
+nTimes = 1000
+vToss = c(-10,40)
+pToss = c(0.8,0.2)
+
+vSampleSpace = replicate(nTimes,sample(vToss,size=1,replace=TRUE,prob=pToss))
+
+vGain = sum(vSampleSpace)
+
+print(paste("In an actual",nTimes,"toss of coin, amount realized is",vGain,sep=' '))
+
+```

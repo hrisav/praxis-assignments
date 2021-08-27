@@ -1,0 +1,384 @@
+
+
+The Expand-Grid function
+============================================================================================
+- Used to expand vectors inside the function
+- Prepares all possible combination of the vectors
+
+
+The Expand-Grid Example
+============================================================================================
+```{r}
+toss = c("Head","Tail")
+chillr = c("Re 1", "Rs 2")
+
+# Getting the expansion from the coin toss
+expand.grid(face=toss, coin=chillr)
+```
+
+Problem of the Day using Expand Grid
+================================================================================================
+You have got a good summer internship and want to treat few of your friends for ice-cream. The
+shop had 5 different ice-cream flavors with 4 different sauces available and 2 types of cones
+available viz. waffle cone & cake cone.
+
+A special summer-bonaza assortment consists of 3 scoops, 2 sauces & 1 cone.
+- How many different options are available for your friends for the special assortment
+- In how-many cases the Scoops and the sauces are all distinct
+- The option of Cake Cone, Chocolate Ice-cream & Chocolate Sauce is forbidden. How many
+options are available in that case
+
+Solution to the Ice-Cream Problem
+================================================================================================
+```{r}
+IceFlavours = c("Vanilla","Strawberry","Mango","Orange","Chocolate")
+IceSauce = c("Chocolate", "Caramel", "Coffee", "Cardamom")
+IceCone = c("Waffle-Cone", "Cake-Cone")
+
+#Finding the Combinations
+SpAssortment = expand.grid(Scoop1 = IceFlavours, Scoop2 = IceFlavours, Scoop3 = IceFlavours, Sauce1 = IceSauce, Sauce2 = IceSauce, Cone = IceCone)
+```
+
+Getting the numbers
+================================================================================================
+```{r}
+#Getting the numbers
+dim(SpAssortment)
+```
+
+Problem of the Day additional piece - 1
+================================================================================================
+- Find the cases where the 3-Scoops and 2-Sauces are all distinct
+
+Solution to the Ice-Cream Problem
+================================================================================================
+```{r}
+NotDistinctScoops = subset(SpAssortment,((Scoop1==Scoop2)|(Scoop2==Scoop3)|(Scoop3==Scoop1)|(Sauce1==Sauce2)))
+
+#Finding the Cases where all are distinct
+nrow(SpAssortment) - nrow(NotDistinctScoops)
+```
+
+
+Problem of the Day additional piece - 2
+============================================================================================
+- The option of the assortment having all of Cake Cone, Chocolate Ice-cream & Chocolate Sauce is forbidden. How many options are available in that case
+
+Solution to the additional piece Ice-Cream Problem
+===========================================================================================
+```{r}
+# Finding the Combinations where it is True
+ForbiddenScoops = which(((SpAssortment$Scoop1=="Chocolate")|(SpAssortment$Scoop2=="Chocolate")|(SpAssortment$Scoop3=="Chocolate"))&((SpAssortment$Sauce1=="Chocolate")|(SpAssortment$Sauce2=="Chocolate"))&(SpAssortment$Cone=="Cake-Cone"))
+
+# Finding the Combinations
+length(ForbiddenScoops)
+```
+
+Solution to the Ice-Cream forbidden case using Subset function for Data Frame
+============================================================================================
+```{r}
+condition1 = (SpAssortment$Scoop1=="Chocolate")|(SpAssortment$Scoop2=="Chocolate")|(SpAssortment$Scoop3=="Chocolate")
+condition2 = (SpAssortment$Sauce1=="Chocolate")|(SpAssortment$Sauce2=="Chocolate")
+condition3 = (SpAssortment$Cone=="Cake-Cone")
+
+# Forbidden condition
+ForbidCondition = condition1&condition2&condition3
+sum(ForbidCondition)
+
+# Taking the Subset where the Condition is not true
+PermittedScoops = subset(SpAssortment,!ForbidCondition)
+
+# Finding the Combinations
+nrow(PermittedScoops)
+```
+
+
+
+The Birthday problem
+==============================================================
+Given the number of students in the class, determine probability in which two or more can have the same birthday assuming that none were born in a Leap year
+
+Building the prototype with 3 students
+==============================================================
+```{r}
+bday = c(1:365)
+
+total_cases = expand.grid(student1=bday,student2=bday,student3=bday)
+
+dim(total_cases)
+
+```
+Building the prototype with 3 students
+==============================================================
+```{r}
+match_cases = ((total_cases$student1==total_cases$student2)|(total_cases$student2==total_cases$student3)|(total_cases$student3==total_cases$student1))
+
+same_birthday = subset(total_cases,match_cases)
+
+dim(same_birthday)
+
+```
+
+Building the prototype with 3 students
+==============================================================
+```{r}
+probability = nrow(same_birthday)/nrow(total_cases)
+print(paste("The probability of same birthday is ",probability))
+
+```
+
+Representing Binomial Distributions in R
+==============================================================
+- dbinom(X,size=N,prob=p) is used to evaluate the PMF of Binomial Distribution at value X from a total sample size N
+- pbinom(X,size=N,prob=p) is used to evaluate the CDF of Binomial Distribution till Value X from a sample size N
+- rbinom(N,prob=p) is used to generate N observations from the Binomial Distribution with probabilty of success as p
+
+
+The Exam Problem
+==============================================================
+An exam has 20 questions with 4 options per questions. 
+- What is the probability that a student will get exactly 12 questions correct
+- Find probability that at-most 12 questions will be correctly answered
+
+
+Building the solution
+==============================================================
+```{r}
+
+total_questions = 20
+
+correct_prob = 0.25
+
+total_correct = 12
+
+```
+Building the Solution
+==============================================================
+```{r}
+all_12_correct = dbinom(total_correct,size=total_questions,prob=correct_prob)
+
+print(all_12_correct)
+
+```
+
+Building the Solution
+==============================================================
+```{r}
+max_12_correct = pbinom(total_correct,size=total_questions,prob=correct_prob)
+
+print(max_12_correct)
+
+```
+
+Representing Poisson Distributions in R
+==============================================================
+- dpois(X,lambda=y) is used to evaluate the PMF of Poisson Distribution at value X
+- ppois(X,lambda=y) is used to evaluate the CDF of Poisson Distribution till Value X
+- rpois(N,lambda=y) is used to generate N observations from the Poisson Distribution with lambda value as y
+
+
+The Order Problem
+==============================================================
+On average, about 20 customers per day cancel their order placed at Jantra Trends Online (JTO)
+- Calculate the probability that the number of cancellations on a day is exactly 15 
+- Also find probability that the maximum number of cancellations on a day is 25
+
+
+Building the solution
+==============================================================
+```{r}
+
+lambda = 20
+
+```
+Building the Solution
+==============================================================
+```{r}
+cancel_15_order = dpois(15,lambda)
+
+print(cancel_15_order)
+
+```
+
+Building the Solution
+==============================================================
+```{r}
+max_25_cancels = ppois(25,lambda)
+
+print(max_25_cancels)
+
+```
+
+The Book Problem
+==============================================================
+A statistics instructor has observed that the number of typographical errors in new editions of textbooks varies considerably from book to book. After some analysis he concludes that the number of errors is Poisson distributed with a mean of 1.5 per 100 pages. The instructor randomly selects 500 pages of a new book. What is the probability that there are no typos?
+
+
+
+Building the solution
+==============================================================
+```{r}
+
+lambda = 1.5*5
+
+```
+
+Building the Solution
+==============================================================
+```{r}
+book_error = dpois(0,lambda)
+
+print(book_error)
+
+```
+
+
+Representing Exponential Distributions in R
+==============================================================
+- dexp(X,rate=y) is used to evaluate the PMF of Exponential Distribution at value X
+- pexp(X,rate=y) is used to evaluate the CDF of Exponential Distribution till Value X
+- rexp(N,rate=y) is used to generate N observations from the Exponential Distribution with parameter rate
+
+
+Problem on Exponential Distributions in R
+==============================================================
+The mean time to failure of a critical engine component is 8,000 hours. What is the probability of failing before 5000 hours?
+
+
+
+Examples Uniform Distributions in R
+==============================================================
+```{r}
+fail_limit = 5000
+
+fail_prob = pexp(fail_limit,rate=1/8000)
+
+print(fail_prob)
+```
+
+
+Representing Uniform Distributions in R
+==============================================================
+- dunif(X,min=a,max=b) is used to evaluate the PMF of Uniform Distribution at value X where a is lower limit and b is upper limit
+- punif(X,min=a,max=b) is used to evaluate the CDF of Uniform Distribution till Value X where a is lower limit and b is upper limit
+- runif(N,a,b) is used to generate N observations from the Uniform Distribution between a and b
+
+
+Problem on Uniform Distributions in R
+==============================================================
+The amount of gasoline sold daily at a service station is uniformly distributed with a minimum of 2,000 gallons and a maximum of 5,000 gallons.
+Find the probability that daily sales will fall between 2,500 and 3,000 gallons.
+What is the probability that the service station will sell at least 4,000 gallons?
+
+
+Examples Uniform Distributions in R
+==============================================================
+```{r}
+sales_l = 2500
+sales_h = 3000
+
+sales_prob = punif(sales_h,min=2000,max=5000) - punif(sales_l,min=2000,max=5000)
+
+print(sales_prob)
+
+```
+
+Examples Uniform Distributions in R
+==============================================================
+```{r}
+sales_min = 4000
+
+sales_min = punif(sales_min, min=2000, max=5000)
+
+print(1-sales_min)
+```
+
+Plotting Uniform Distributions in R
+==============================================================
+```{r}
+# Generate 200 observations from a Unifrom Distribution between 40 and 80
+plot(round(runif(200,40,80)))
+```
+
+Representing Normal Distributions in R
+==============================================================
+Suppose that at another gas station the daily demand for regular gasoline is normally distributed with a mean of 1,000 gallons and a standard deviation of 100 gallons. 
+
+The station manager has just opened the station for business and notes that there is exactly 1,100 gallons of regular gasoline in storage. 
+
+The next delivery is scheduled later today at the close of business. The manager would like to know the probability that he will have enough regular gasoline to satisfy today's demands. 
+
+
+Representing Normal Distributions in R
+==============================================================
+- dnorm(X,mean,sd) is used to evaluate the PMF of Normal Distribution at value X
+- pnorm(X,mean,sd) is used to evaluate the CDF of Normal Distribution till Value X
+- rnorm(N,mean,sd) is used to generate N observations from the Normal Distribution with parameters mean=mu and sd=sigma
+
+Solution using Normal Distribution
+==============================================================
+```{r}
+gasoline_max = 1100
+
+enough_prob = pnorm(gasoline_max,mean=1000,sd=100)
+
+print(paste("The probability of enough gasoline is ",enough_prob, sep=' '))
+
+```
+
+Problem with Normal Distribution in R
+==============================================================
+Consider an investment whose return is normally distributed with a mean of 10% and a standard deviation of 5%. 
+a. Determine the probability of losing money.
+b. Find the probability of losing money when the standard deviation is equal to 10%.
+
+Examples Normal Distributions in R
+==============================================================
+```{r}
+inv_return = 0
+
+losing_prob = pnorm(inv_return,mean=0.10,sd=0.05)
+
+print(paste("The losing probability is ",losing_prob, sep=' '))
+```
+
+Examples Normal Distributions in R
+==============================================================
+```{r}
+inv_return = 0
+
+losing_prob = pnorm(inv_return,mean=0.10,sd=0.10)
+
+print(paste("The losing probability is ",losing_prob, sep=' '))
+```
+
+
+Examples Normal Distributions in R
+==============================================================
+```{r}
+# Generate N observations from the Normal Distribution between with mean 40 and SD 80
+myNos = rnorm(20,mean=40,sd=80)
+#myNos = round(myNos)
+```
+
+
+Quick Hands On - 2
+==============================================================
+```{r}
+# Get the 5th numbers from the distribution
+myNos[5]
+
+# Generate the first 10 numbers from the distribution
+myNos[c(1:10)]
+
+# Generate the 3rd, 5th and 7th number from the distribution
+myNos[c(3,5,7)]
+```
+
+Quick Hands On - 3
+==============================================================
+```{r}
+# Generate every alternate number in the Distribution
+myNos
+myNos[seq(1,20,2)]
+```

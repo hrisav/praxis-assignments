@@ -1,0 +1,883 @@
+
+The classical problem
+=====================================
+A hare & tortoise went for a race of 200 kilometers. The hare is fast wants to win at any condition. He starts the journey at 12 km per hour. Also due to the extra energy he expends, he ends up reducing the speed by 2 km every hour. When the speed is at the verge of becoming 0, the hare sleeps for anything between 1 and 3 hours. When he wakes up again, regains the speed at 12 km per hour again and keeps losing at 2 km every hour like before before he goes for sleep. The cycle continues.
+The tortoise starts the race at 2km per hour and steadily increases the pace by 5% per hour. Who wins the race?
+
+
+Calculate the tortoise case
+================================================
+```{r}
+# Initially setting the number of hours to 0
+ht_Tortoise = 0
+
+# Tortoise starts at a speed of 2 km / hour
+rt_Tortoise = 2
+
+dt_Tortoise = 0 # Distance initialized to 0
+
+# Tortoise goes till he reaches 200 km
+while(dt_Tortoise<200)
+{
+  # Adding the hourly rate to the already traversed distance
+  dt_Tortoise = dt_Tortoise + rt_Tortoise
+  
+  # Increasing the tortoise rate by 5% every hour
+  rt_Tortoise = rt_Tortoise * 1.05
+  
+  # Increment the hour
+  ht_Tortoise = ht_Tortoise + 1
+  
+}
+
+print(paste("The tortoise took",ht_Tortoise,"hours",sep=" "))
+```
+
+Calculate the hare case 
+================================================
+```{r}
+
+# Initially setting the number of hours to 0
+ht_Hare = 0
+
+# Setting the initial speed to 12 km/hour
+rt_Hare = 12
+
+# Initialize the distance covered and hours taken by the hare to 0
+dt_Hare = 0
+
+# The rabbit covers distance of 200 km
+while(dt_Hare<200)
+{
+  # Adding the hourly rate to the already traversed distance
+  dt_Hare = dt_Hare + rt_Hare
+  
+  rt_Hare = rt_Hare - 2
+  
+  if (rt_Hare<=0)
+  {
+    # The hare goes for sleep between 1 and 3 hours
+    ht_Hare = ht_Hare + sample(1:3,size=1,replace = TRUE)
+    
+    #Reinitialize the speed of the Hare
+    rt_Hare = 12
+  }
+  
+  # Increment the hour
+  ht_Hare = ht_Hare + 1
+  
+}
+  
+print(paste("The Rabbit took",ht_Hare,"hours",sep=" "))
+
+```
+
+Finding who won
+================================================
+```{r}
+
+if(ht_Hare<ht_Tortoise)
+  print("The Rabbit won") else print("The Tortoise won")
+
+```
+
+
+Problem - The Drunk Casino Owner
+========================================================
+You are celebrating a successful summer internship at a Casino with 5 friends. Incidentally it was the owner's birthday and he came to your table and offered drinks. You had 10 shots each with the owner merrily before he belted out an offer.
+
+" I like you guys - let's play a game to make this evening more memorable. Each of the shots you took costs $10. Select any 3 numbers of your choice between 6 and 36 and each of you Roll the die taking turns. If any of your number comes up, I agree to pay you $1000 for the throw. If otherwise, you pay me $20 as the price of the shot. Think about it and I will send Nina for confirmation"
+
+While you were discussing possibilities, the beautiful Nina came to your table. You became more confused when with a mysterious smile she said " I suggest you test your luck on a 34, 26 and 36 ". Enchanted over her charm, you all readily agreed to the offer and Nina walked away.
+
+Given you are the only one trained in Data Analytics in the team - deduce if Nina was playing fair?
+(Inspired from popular Casino stories)
+
+Problem - The Drunk Casino Owner
+========================================================
+While you were discussing possibilities, the beautiful Nina came to your table. You became more confused when with a mysterious smile she said " I suggest you test your luck on a 34, 26 and 36 ". Enchanted over her charm, you all readily agreed to the offer and Nina walked away.
+
+Given you are the only one trained in Data Analytics in the team - deduce if Nina was playing fair?
+(Inspired from popular Casino stories)
+
+What business impact the problem has?
+========================================================
+- You stand a chance to lose money
+- There is also a window to make some money
+- Assess your chances of Win vs Lose
+
+What should be your stance
+========================================================
+- Evaluate the cases where you stand to lose
+- Evaluate the probability of the losses
+- Calculate the expected value
+
+Define the Logic you should use
+========================================================
+- Create the total possible outcome
+- Find the number of cases favouring winning
+- Find the number of cases favouring losing
+- Calculate the respective probabilities
+- Get the expected values
+
+Identify the Data container
+=======================================================
+- A container to store the possible values from the throw of a die
+- A container to store the value generated from the throw of 1 die
+- A container to store the value generated from the throw of 6 dice
+- A container to store the value generated from the 10 experiments
+- A container to count the number of successful case
+- A container to find the probabilty of winning and probability of losing
+
+Identify few Procedures to use
+=======================================================
+- Procedure to randomly get a throw from a die
+- Procedure to sum the throw for all the 6 dice
+- Procedure to get the probabilities for the dice throw
+
+
+Problem Prototype - Data Definition
+=========================================================
+- Let's build the Solution with only 2 dice
+```{r}
+# Defining the 2 Dice
+Die1 = c(1:6)
+Die2 = seq(1,6,1)
+```
+
+Problem Prototype - Procedures
+=========================================================
+- Let's simulate the procedure of throwing all the Dice
+```{r}
+# Throwing the 2 Dice
+Throw1 = sample(Die1, size=1, replace=TRUE)
+Throw2 = sample(Die2, size=1, replace = TRUE)
+```
+
+Introducing a new Function - Replicate
+========================================================
+- The "replicate" function in R runs an operation as specified
+- You need to provide the number of times its desired to run along with the function
+- The output of the function is generally stored in a vector
+- The syntax is as below
+- replicate(Number of Times to Run, Name of the Procedure with parameters)
+
+Problem Prototype - Procedures
+=========================================================
+- Let's simulate the procedure of repeating Dice throws
+```{r}
+# Throwing the 2 Dice
+Throw1_10 = replicate(10,sample(Die1, size=1, replace=TRUE))
+Throw2_10 = replicate(10,sample(Die2, size=1, replace = TRUE))
+
+# Showing the Output
+print(Throw1_10)
+print(Throw2_10)
+```
+
+Problem Prototype - Procedures
+=========================================================
+- Getting the sum of the Throws
+```{r}
+# Throwing the 2 Dice
+Throw_Sum = Throw1_10 + Throw2_10
+print(Throw_Sum)
+```
+
+Getting the number of events from a Sample Space
+=========================================================
+- For 1 die, the total sample space is 6
+- For 2 dice, the total sample space is 36
+- For 3 dice, the total sample space is 216
+- For 4 dice, the total sample space is 1296
+
+
+Problem Prototype - Calculate Proportions
+=========================================================
+- Getting the Probabilities for 6 & 7
+```{r}
+# Getting the outputs which are 6 or 7
+OP6or7 = (Throw_Sum==6|Throw_Sum==7)
+print(OP6or7)
+
+# Counting the number of cases for 6 or 7
+Countof6or7 = sum(OP6or7)
+print(Countof6or7)
+
+WinProp = Countof6or7/length(Throw_Sum)
+LoseProp = 1 - WinProp
+```
+
+Why we used the function "which" here
+=====================================================================
+- The "which" function gives you the index from a vector where matches
+- You need to provide the vector name with the corresponding logical condition
+- The output of the function is stored in a vector with only index of matching condition
+- The syntax is as below
+- which(Condition)
+
+Calculating the Number of Cases from the Sample Space for the Prototype
+====================================================================
+- Do a Random Experiment
+```{r}
+# Getting the outputs which are 6 or 7
+Throw1 = sample(Die1, size=600, replace=TRUE)
+Throw2 = sample(Die2, size=600, replace = TRUE)
+Throw_Sum = Throw1 + Throw2
+OP6or7 = which(Throw_Sum==6|Throw_Sum==7)
+
+# Counting the number of cases for 6 or 7
+Throw6or7 = length(OP6or7)
+```
+
+Calculating the Probability from the Sample Space for the Prototype
+====================================================================
+- Use the Counts
+```{r}
+# Finding the Winning Probability when the Outputs are 6 or 7
+WinProb = Throw6or7/length(Throw_Sum)
+LoseProb = 1 - WinProb
+print(WinProb)
+
+#Theoretical Win Probability is as follows:
+Casesfor6 = 5
+Casesfor7 = 6
+ActualProb = (Casesfor7+Casesfor6)/36
+print(ActualProb)
+```
+
+Introducing to writing your own Function
+========================================================
+- Define the name of the function
+- Tell the system that you are defining a function
+- Syntax is [Function_Name = function()]
+- If there are parameters that the function requires, define them within the bracket in function(parameters1, Param2,...)
+- The block of Function starts with a curly bracket "{" and ends with a curly bracket "}"
+- If the function returns something, mention that explicitly with return
+- Syntax return(variable)
+- Close the loop
+- When calling the function, give the function name and any parameter that you may need
+
+
+
+Problem Prototype - Writing a Function
+=========================================================
+- A function to simulate the Dice throwing
+
+```{r}
+# Declare the Function
+Dice_Throw_Ind0 = function (Throw_Num_times)
+{
+  pDie = c(1:6)
+  
+  #Throw the Dice for the number of times you specify
+  Throw_Dice = sample(pDie,size = Throw_Num_times,replace = TRUE)
+    
+  return(Throw_Dice)
+  
+}
+
+print(Dice_Throw_Ind0(10))
+  
+```
+
+Problem Prototype - Writing a Function
+=========================================================
+- A function to simulate the Dice throwing
+
+```{r}
+# Declare the Function
+Dice_Throw_Ind = function (Throw_Num_times)
+{
+  pDie = c(1:6)
+  
+  #Throw the Dice once and replicate the opeartion for the number of times you specify
+  Throw_Dice = replicate(Throw_Num_times, sample(pDie,size=1,replace = TRUE))
+    
+  return(Throw_Dice)
+  
+}
+
+print(Dice_Throw_Ind(10))
+  
+```
+
+
+
+Problem Prototype - Calling a Function from a Function
+=========================================================
+- A function to simulate the summing of the Dice
+
+```{r}
+# Declare the Function
+Dice_Throw_Grp = function (Throw_Num,Dice_Num) {
+  counter = 0
+  Throw_Sum = rep(0,Throw_Num)
+  
+  while (counter < Dice_Num){
+    
+    #Throw the Dice for the number of times you specify
+    Throw_Dice = Dice_Throw_Ind(Throw_Num_times = Throw_Num )
+    
+    #Sum up the Throws
+    Throw_Sum = Throw_Sum + Throw_Dice
+    
+    #Add the Counter
+    counter = counter + 1
+  }
+  return(Throw_Sum)
+}
+```
+
+
+Problem Prototype - Writing a Complex Function
+=========================================================
+- A function to simulate the summing of the Dice
+```{r}
+# Declare the Function
+Dice_Throw_Sum = function (Throw_Num,Dice_Num) {
+  counter = 0
+  Throw_Sum = rep(0,Throw_Num)
+  while (counter < Dice_Num){
+    #Throw the Dice for the number of times you specify
+    Throw_Dice = replicate(Throw_Num, sample(1:6,1,replace = TRUE))
+    
+    #Sum up the Throws
+    Throw_Sum = Throw_Sum + Throw_Dice
+    
+    #Add the Counter
+    counter = counter + 1
+  }
+  return(Throw_Sum)
+}
+```
+
+Doing a Random Experiment and Visualize
+=========================================================
+- Do a Random Experiment
+```{r}
+# Throw the 6 Dice 60 times
+Throw_Sum = Dice_Throw_Sum(60,6)
+
+#Visualize
+plot(Throw_Sum)
+
+```
+
+Doing a Random Experiment Several times and Plot
+=========================================================
+- Do a Random Experiment
+```{r}
+# Throw the 6 Dice 600 times
+Throw_Sum = Dice_Throw_Sum(600,6)
+
+#Visualize
+plot(Throw_Sum)
+
+```
+
+Doing a Random Experiment and Estimate Frequency
+=========================================================
+- Do a Random Experiment
+```{r}
+# Throw the 6 Dice 6000 times
+Throw_Sum = Dice_Throw_Sum(6000,6)
+
+#Visualize
+hist(Throw_Sum)
+```
+
+Doing a Random Experiment and Counting Frequency
+=========================================================
+- Do a Random Experiment
+```{r}
+# Throw the 6 Dice 60000 times
+Throw_Sum = Dice_Throw_Sum(6000,6)
+
+# Getting the position of 34,26 & 36
+OP34or26or36 = which(Throw_Sum==34|Throw_Sum==26|Throw_Sum==36)
+
+# Counting the number of cases for 34, 26 or 36
+Throw34or26or36 = length(OP34or26or36)
+```
+
+Doing a Random Experiment and Getting Probabilities
+=========================================================
+- Calculate the Proportions from the Large Sample
+```{r}
+WinProb = Throw34or26or36/length(Throw_Sum)
+print(WinProb)
+LoseProb = 1 - WinProb
+```
+
+Calculate the Expectations from the Random Experiment
+=========================================================
+- Calculate the Probability*Payoff
+```{r}
+#Expected Payoff from 1 round of Play
+Expectations = 1000*WinProb + (-60)*LoseProb
+
+#Payoff Expectations from 10 round of Play
+print(Expectations*10)
+```
+
+Run the Actual Experiment
+=========================================================
+- Declare the Payoff and Run the experiment
+```{r}
+#Declaring the Payoffs before you start the Experiment
+Win_list = c(34,26,36)
+Win_Payoff = 1000
+Lose_Payoff = -60
+
+#Play the Games and Get the OP sum for Throw of 6 dice
+Get_Play_OP = replicate(10,Dice_Throw_Sum(1,6))
+print(Get_Play_OP)
+```
+
+Compute the Payoffs
+=========================================================
+- Calculate the Payoff
+```{r}
+#Check if Payoff Exists
+Payoff_Exists = which(Get_Play_OP==34|Get_Play_OP==26|Get_Play_OP==36)
+WinNos = length(Payoff_Exists)
+print(WinNos)
+
+#Calculate Actual Payoff
+Final_Payoff = WinNos*Win_Payoff + (10 - WinNos)*Lose_Payoff
+print(Final_Payoff)
+
+```
+
+Using the Function "match"
+============================================================================================
+- The basic "match" function takes in 2 arguments - a source vector & a vector to be matched
+- Wherever the Source Vector finds the matching vector, it pulls out the Location in the matching vector
+- Wherever there is no match, it shows NA
+- The syntax is as below  match(Source Vector, Vector to be Matched)
+
+Alternate Payoff Deduction
+============================================================================================
+- Calculate the Wins and Loses
+```{r}
+#Check if Payoff Exists
+print(Get_Play_OP)
+Payoff_Exists_Match = match(Get_Play_OP,Win_list)
+print(Payoff_Exists_Match)
+LoseNos = sum(is.na(Payoff_Exists_Match))
+print(LoseNos)
+```
+
+Calculate Payoff
+=============================================================
+```{r}
+#Calculate Actual Payoff
+Final_Payoff = LoseNos*Lose_Payoff + (10 - LoseNos)*Win_Payoff
+print(Final_Payoff)
+```
+
+Calculate the Expectations for No Success
+=========================================================
+- Calculate the Bernouli Trial
+```{r}
+# Something here is definitely wrong??
+NoWin = dbinom(0,10,WinProb)
+print(NoWin)
+Expectations = -600*NoWin + 1000*(1-NoWin)
+
+print(Expectations)
+```
+
+Googly Time
+==========================================================
+- The game you played has 11 possible outcomes as given below:
+- -600  (0 Wins)
+- 460     1520    2580
+- 3640    4700    5760
+- 6820    7880    8940
+- 10,000 (10 Wins)
+-
+- You have 10 in 11 chances of winning the game. So should you have played the game?
+
+
+Calculate the Expectations through a Function
+=========================================================
+```{r}
+Get_PLay_Expectations = function(Number_of_Trials,Winning_Probability, WinPayoff, LosePayoff)
+{
+  count = 0
+  FinalPayoff = 0
+  
+  while (count <= Number_of_Trials)
+  {
+    # Calculating the Payoff in different scenarios of Win & Lose
+    currPayoff = WinPayoff*count + LosePayoff*(Number_of_Trials - count)
+    
+    Winning_Prob = dbinom(count,Number_of_Trials,Winning_Probability)
+    
+    FinalPayoff = FinalPayoff + currPayoff*Winning_Prob
+    
+    count = count + 1
+  }
+  return(FinalPayoff)
+}
+
+```
+
+
+Getting your Expectations Correct
+=========================================================
+```{r}
+PlayExpectations = Get_PLay_Expectations(10,Winning_Probability = WinProb,WinPayoff = 1000,LosePayoff = -60)
+print(PlayExpectations)
+
+```
+
+Compute some basic Statistics
+================================================
+```{r}
+DiceDistribution = Dice_Throw_Sum(60000,6)
+# Getting the Sum of the Distribution
+sum(DiceDistribution)
+
+# Getting the Mean of the Distribution
+mean(DiceDistribution)
+
+# Getting the Median of the Distribution
+median(DiceDistribution)
+
+```
+
+Compute some basic Statistics
+================================================
+```{r}
+# Getting the Maximum of the Distribution
+max(DiceDistribution)
+
+# Getting the Minimum of the Distribution
+min(DiceDistribution)
+
+# Showing the variance of the Distribution
+var(DiceDistribution)
+
+```
+
+Compute Summary Statistics
+================================================
+```{r}
+# Getting the first few elements of the Distribution
+head(DiceDistribution)
+
+# Showing the last few elements of the Distribution
+tail(DiceDistribution)
+
+# Getting the Summary of the Distribution
+summary(DiceDistribution)
+
+```
+
+Compute Summary Statistics
+================================================
+```{r}
+# Tabulating the elements distribution
+table(DiceDistribution)
+DiceDist = table(DiceDistribution)
+
+```
+
+Compute Summary Statistics
+================================================
+```{r}
+# Tabulating the elements distributions
+hist(DiceDistribution, xlab = "Dice Output", ylab = "No. of Observation")
+
+```
+
+Compute Summary Statistics
+================================================
+```{r}
+# Getting the location of the maximum elements of the Distribution
+which(DiceDist==max(DiceDist))
+which.max(DiceDist)
+
+# Getting the location of the minimum elements of the Distribution
+which(DiceDist==min(DiceDist))
+which.min(DiceDist)
+
+```
+
+Compute Summary Statistics
+================================================
+```{r}
+# Getting the Element with maximum count from the Distribution
+names(which.max(DiceDist))
+
+# Getting the Element with minimum count from the Distribution
+names(which.min(DiceDist))
+
+```
+
+Getting the Element with Max Frequency
+================================================
+```{r}
+# Getting element with Maximum Frequency
+DiceDist[which(DiceDist==max(DiceDist))]
+
+# Getting element with Minimum Frequency
+DiceDist[which(DiceDist==min(DiceDist))]
+
+```
+
+Getting the Top 3 Elements
+================================================
+```{r}
+# Getting element with Minimum Frequency
+head(sort(DiceDist),3)
+
+#Getting element with Maximum Frequency
+tail(sort(DiceDist),3)
+
+```
+
+Alt: Getting the Top 3 Elements
+================================================
+```{r}
+# Getting element with Maximum Frequency
+DiceDist[order(DiceDist, decreasing = TRUE)][1:3]
+
+# Getting element with Minimum Frequency
+DiceDist[order(DiceDist, decreasing = FALSE)][1:3]
+
+```
+
+Using table to check some conditions
+================================================
+```{r}
+# Getting element with Maximum Frequency
+table(DiceDistribution>26)
+
+DiceDist[names(DiceDist)==34|names(DiceDist)==26|names(DiceDist)==36]
+
+```
+
+Using table to check some conditions
+================================================
+```{r}
+DiceDist[as.numeric(DiceDist) >= 4000 & as.numeric(DiceDist) <= 5000]
+```
+
+
+Problem Prototype - Simplifying the Complex Function
+=========================================================
+- A function to simulate the summing of the Dice
+```{r}
+# Declare the Function
+Dice_Throw_Game = function (Friend_Num, Game_Num) 
+{
+  Throw_Dice = replicate(Friend_Num, sample(1:6, size=Game_Num, replace = TRUE))
+  
+  return(Throw_Dice)
+  
+}
+
+```
+Problem Prototype - Simplifying the Complex Function
+=========================================================
+- A function to simulate the summing of the Dice
+```{r}
+# Call the Function
+
+Dice_Throw_Game(Friend_Num=2,Game_Num=4)
+Dice_Throw_Game(Friend_Num=4,Game_Num=2)
+
+```
+
+Problem Prototype - Simplifying the Complex Function
+=========================================================
+- A function to simulate the summing of the Dice
+```{r}
+# Declare the Function
+Dice_Game_Sum = function (Friend_Num, Game_Num) 
+{
+  
+  Dice_Matrix = Dice_Throw_Game(Friend_Num, Game_Num)
+  
+  df_Throw_Dice = data.frame(Dice_Matrix)
+  df_Throw_Dice$throw_sum = rowSums(df_Throw_Dice)
+  
+  return(df_Throw_Dice$throw_sum)
+  
+}
+
+Dice_Game_Sum(Friend_Num=2,Game_Num=4)
+```
+
+Doing a Random Experiment and Counting Frequency
+=========================================================
+- Do a Random Experiment
+```{r}
+
+# Throw the 6 Dice 60000 times
+Throw_Sum = Dice_Game_Sum(Friend_Num=6, Game_Num=10)
+
+print (Throw_Sum)
+
+```
+
+Getting the True Cases
+=========================================================
+- Do a Random Experiment
+```{r}
+WinList = c(34,26,36)
+
+# Getting the presence of 34,26 & 36
+OP34or26or36 = Throw_Sum %in% WinList
+
+print(OP34or26or36)
+
+```
+
+
+Doing a Random Experiment and Getting Probabilities
+=========================================================
+- Calculate the Proportions from the Large Sample
+```{r}
+WinProb = sum(OP34or26or36)/length(OP34or26or36)
+print(WinProb)
+LoseProb = 1 - WinProb
+```
+
+Calculate the Expectations from the Random Experiment
+=========================================================
+- Calculate the Probability*Payoff
+```{r}
+#Expected Payoff from 1 round of Play
+Expectations = 1000*WinProb + (-60)*LoseProb
+
+#Payoff Expectations from 10 round of Play
+print(Expectations*10)
+```
+
+Run the Actual Experiment
+=========================================================
+- Declare the Payoff and Run the experiment
+```{r}
+#Declaring the Payoffs before you start the Experiment
+Win_list = c(34,26,36)
+Win_Payoff = 1000
+Lose_Payoff = -60
+
+#Play the Games and Get the OP sum for Throw of 6 dice
+Get_Play_OP = Dice_Game_Sum(6,6)
+print(Get_Play_OP)
+```
+
+
+
+
+The Expand-Grid function
+============================================================================================
+- Used to expand vectors inside the function
+- Prepares all possible combination of the vectors
+
+
+The Expand-Grid Example
+=============================================================================================
+```{r}
+tossin = c("Head","Tail")
+chillr = c("Re 1", "Rs 2")
+
+# Getting the expansion from the coin toss
+expand.grid(face=tossin)
+
+# Getting the expansion from the chiller
+expand.grid(coin=chillr)
+```
+
+The Expand-Grid Example
+============================================================================================
+```{r}
+toss = c("Head","Tail")
+chillr = c("Re 1", "Rs 2")
+
+# Getting the expansion from the coin toss
+expand.grid(face=tossin, coin=chillr)
+```
+
+The Expand-Grid Example
+=============================================================================================
+```{r}
+rSeq=c(10:12)
+
+# Getting the expansion from the coin toss
+expand.grid(face=tossin, coin=chillr, mySeq=rSeq)
+```
+
+
+Using Expand-Grid
+========================================================
+Six of you Navya, Bhavya, Kabya, Amit, Sumit & Punit are playing the game of throwing a dice. How many total combinations are there. Find the total possible cases which gives you the output as 21
+
+Expand Grid
+=================================================
+```{r}
+pDie = c(1:6)
+myDiceThrow = expand.grid(Navya = pDie,Bhavya = pDie, Kabya = pDie, Amit = pDie, Punit = pDie, Sumit = pDie)
+
+#Finding the Class of the Output Container
+class(myDiceThrow)
+
+#Finding the Dimensions
+dim(myDiceThrow)
+```
+
+Expand Grid
+=================================================
+```{r}
+
+#Finding the header rows
+names(myDiceThrow)
+
+#Checking how the output looks like
+tail(myDiceThrow)
+```
+
+Alt-Commands for Dimensions
+=================================================
+```{r}
+# Find the number of Columns
+ncol(myDiceThrow)
+
+# Find the number of Rows
+nrow(myDiceThrow)
+
+```
+
+R Expand Grid
+=================================================
+```{r}
+# Preparing the condition where they got the sum as 21
+myJackpotBin = subset(myDiceThrow, (Navya+Bhavya+Kabya+Amit+Punit+Sumit==21))
+
+# Finding the total cases supporting the sum as 21
+nrow(myJackpotBin)
+
+head(myJackpotBin)
+
+```
+
+Getting the condition as a Data Frame column
+=================================================
+```{r}
+# Preparing the condition where they got the sum as 21
+
+myDiceThrow$throw_sum = rowSums(myDiceThrow)
+  
+myJackpotBin = subset(myDiceThrow, throw_sum==21)
+
+# Finding the total cases supporting the sum as 21
+nrow(myJackpotBin)
+
+```
+

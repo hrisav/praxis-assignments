@@ -1,0 +1,806 @@
+Analytics Tools & Techniques for Decision Making
+========================================================
+author: Prof Sourav Saha
+date: 
+width: 1280
+height: 800
+
+
+Principles of Data Science with R
+========================================================
+- Understand the Problem
+- Create outline for the Solution
+- Capture Data
+- Visualize Data
+- Build viable prototype
+- Run the experiment
+- Evaluate your prototype
+- Extend to the entire solution
+- Interpret
+
+The basics of R
+========================================================
+- Creating a dataset
+- Basic operation on the dataset
+- Mean, Standard Deviation, Correlation
+- Plotting
+
+
+Illustrations 
+========================================================
+## Here we will use R to show basic operations
+
+```{r}
+
+# Get the Working Directory
+getwd()
+
+# Define a list for Age
+age = c(1,3,5,2,11,9,3,9,12,3)
+
+# Define a list for Weight
+weight = c(4.4,5.3,7.2,5.2,8.5,7.3,6.0,10.4,10.2,6.1)
+
+
+```
+
+Illustrations 
+========================================================
+## Here we will use R to show basic operations
+
+```{r}
+
+# Find the mean Weight
+mean(weight)
+
+# Find the Standard Deviation
+sd(weight)
+
+```
+
+Illustrations 
+========================================================
+## Here we will use R to show basic operations
+
+```{r}
+# Define a summary for Weight
+summary(weight)
+
+```
+
+
+Illustrations 
+========================================================
+## Here we will use R to show basic operations
+
+```{r}
+
+# Draw histogram for Weight
+hist(weight)
+
+```
+
+Bivariate insights 
+========================================================
+## Here we will use R to get basic information
+
+```{r}
+
+# Find the Correlation
+cor(age,weight)
+
+```
+
+Bivariate Plots 
+========================================================
+## Here we will use R to get basic information
+
+```{r}
+
+# Plot the Data
+plot(age,weight)
+
+```
+
+Data Frames
+========================================================
+## Here we will use R to get basic information
+
+```{r}
+
+new_df = data.frame(age,weight)
+
+str(new_df)
+
+```
+
+Working on Plots
+========================================================
+## Here we will use R to get basic information
+
+```{r}
+
+dose  = c(20, 30, 40, 45, 60)
+drugA = c(16, 20, 27, 40, 60)
+drugB = c(15, 18, 25, 31, 40)
+
+plot(dose, drugA, type="l")
+# Type is line
+
+```
+
+
+Working on Plots
+========================================================
+## Here we will use R to get basic information
+
+```{r}
+
+plot(dose, drugB, type="l", pch=23, lty=6, col="blue")
+# Given the pixel size, line-type, color and background
+
+```
+
+
+
+Working on Dataframes
+========================================================
+## Here we will use R to get basic information
+
+```{r}
+
+dose  = c(20, 30, 40, 45, 60)
+drugA = c(16, 20, 27, 40, 60)
+drugB = c(15, 18, 25, 31, 40)
+
+dose_df=data.frame(dose,drugA,drugB)
+
+```
+
+Working on Dataframes
+========================================================
+## Here we will use R to get basic information
+
+```{r}
+
+plot(dose_df$dose, dose_df$drugA, type="b", 
+     main="Clinical Trials for Drug A", 
+     xlab="Dosage", ylab="Drug Response",
+     xlim=c(0, 60), ylim=c(0, 70)
+     )
+
+```
+
+Pairwise Scatter Plot
+========================================================
+## Drawing a Scatter Plot pairwise
+
+```{r}
+
+# Scatter-plot matrices
+pairs(~ dose + drugA + drugB, data=dose_df, 
+      main="Basic Scatterplot Matrix")
+```
+
+Working on Dataframes
+========================================================
+## Here we will use R to get basic information
+
+```{r}
+
+opar = par(no.readonly=TRUE)
+par(mfrow=c(2,2))
+plot(dose_df$dose,dose_df$drugA, main="Scatterplot of Dose vs vs. Drug A")
+plot(dose_df$dose,dose_df$drugB, main="Scatterplot of Dose vs vs. Drug B")
+
+hist(dose_df$dose, main="Histogram of Dosages")
+boxplot(dose_df$dose, main="Boxplot of Dosages")
+par(opar)
+
+```
+
+Calculations using R
+========================================================
+- Operator 	Description
+- addition (+)
+- subtraction (-)
+- multiplication (*)
+- division (/)
+- exponentiation (^ or **)
+- remainder x %% y 	modulus (x mod y) 5%%2 is 1
+- quotient x %/% y 	integer division 5%/%2 is 2
+
+
+
+R Calculator 
+========================================================
+## Here we will use R to Add, Subtract and Multiply
+
+```{r}
+
+# Addition
+1+2
+
+# Subtraction
+1-2
+
+# Multiplication
+2*3
+
+```
+
+R Calculator 
+========================================================
+## Here we will use R to Divide
+
+```{r}
+
+# Division
+6/2
+
+6/4
+
+# Remainder operation
+6%%4
+
+# Quotient operation
+6%/%4
+
+# Exponentiation
+2^3
+
+
+```
+
+Creating Variables in R
+========================================================
+## Assigning variables
+
+```{r}
+vADD = 1+2
+
+v_SUB = 1-2
+
+v_MUL = 2*3
+
+Div1 = 6/2
+
+Div2 = 6/4
+```
+
+
+Rules for Creating Variables in R
+========================================================
+- Cannot start with a number
+- Except underscore(_) and dot(.), no other special characters permitted
+- Can contain number(s) in the middle or the end
+
+
+Printing numerical values in R
+========================================================
+## Printing the numerical values
+
+```{r}
+
+print(1+2*2)
+
+vOP = 1+2*2
+print(vOP)
+
+v1REM = 6%%4
+print(v1REM)
+
+```
+
+
+Looking at the R print statement
+========================================================
+```{r}
+
+# Printing a statement
+print("Happy to learn R")
+
+# Printing a statement using Variables
+cStatement = "I am actively learning new concepts in R"
+print(cStatement)
+
+```
+
+Combining multiple print statements and variables
+========================================================
+```{r}
+
+cStatement = "I am printing"
+
+vOP = 5/2
+
+pVAL = paste(cStatement,vOP,"as the answer", sep=' ')
+
+print(pVAL)
+```
+
+
+Combining multiple print statements and variables
+========================================================
+```{r}
+cStatement = "See how I print"
+
+vOP1 = 7%/%2
+
+vOP2 = 7%%2
+
+print(paste(cStatement,vOP1,"as quotient",vOP2,"as remainder",sep=' '))
+```
+
+
+Finding out mean using R
+========================================================
+```{r}
+v1=3
+v2=5
+v3=7
+
+vmean = (v1+v2+v3)/3
+
+print(paste("The mean is",vmean, sep=' '))
+```
+
+
+Defining a list of elements
+========================================================
+```{r}
+
+c(1,3,5,7)
+
+c(1.5,2.5,3.5)
+
+c("ab","bc","ca")
+
+c(3,"ab","3ab",6)
+
+```
+
+Accessing a list of elements
+========================================================
+### Take the list and in square bracket add the index
+```{r}
+
+c(1,3,5,7)[1]
+
+c(1.5,2.5,3.5)[2]
+
+c("ab","bc","ca")[3]
+
+c(3,"ab","3ab")[4]
+
+```
+
+
+More opeartions on R lists
+===================================
+## In this piece, we will learn more calculations
+
+```{r}
+
+## Summing up a List
+sum(c(1,3,5,7))
+
+## Length of a List
+length(c(2,4,6,8))
+```
+
+Using the lists in R
+========================================================
+## Using the list to find average
+```{r}
+vLIST = c(3,5,7)
+
+vSUM = sum(vLIST)
+
+nSUM = length(vLIST)
+
+print(paste("The sum is",vSUM,"and the total elements is",nSUM))
+
+vAVG = vSUM/nSUM
+
+print(paste("The mean calculated using lists is",vAVG, sep=' '))
+```
+
+
+Built-in functions using R
+========================================================
+
+```{r}
+vLIST = c(3,5,7)
+
+# Finding the Minimum
+min(vLIST)
+
+# Finding the Maximum
+max(vLIST)
+
+# Finding the Mean
+mean(vLIST)
+
+```
+
+
+More list opeartions using R
+===================================
+## In this piece, we will learn more list calculations
+
+```{r}
+
+## Adding a number to the list
+c(1,3,5,7) + 3
+
+## Multiplying a number to the list
+c(2,4,6,8) * 3
+
+## Dividing the list by a number
+c(2,4,6,8) / 2
+
+```
+
+
+More list operations using R
+===================================
+## In this piece, we will learn how to use R just as a simple calculator.
+- Adding 2 lists
+```{r}
+
+## Adding 2 lists
+c(1,3,5,7) + c(2,4,6,8)
+
+## Subtracting 2 lists
+c(2,4,6,8) - c(1,3,5,7)
+```
+
+
+Defining a sequence
+===================================
+## In this piece, we will learn sequences using R
+
+```{r}
+
+## Defining a sequence in front order
+1:10
+
+## Defining a sequence in front order
+10:20
+
+## Defining a sequence in reverse order
+20:10
+
+```
+
+Working with Sequence
+===================================
+
+```{r}
+
+## Defining a sequence in front order
+seq1 = 1:10
+
+## Defining a sequence in front order
+seq2 = 21:30
+
+vSeq = seq1 + seq2
+
+print(paste("Value of the sequence is",vSeq))
+
+```
+
+
+Defining a sequence with Steps
+===================================
+## In this piece, we will learn sequences using R function
+- format is seq(from=number, to=number, by=step)
+
+```{r}
+
+## Defining a sequence with unit step
+seq(1,10,1)
+
+## Defining a sequence front order
+seq(10,20,2)
+
+## Defining a sequence reverse order
+seq(20,10,-2)
+
+```
+
+
+Class Problems
+===================================
+- Find all the even number between 1 and 50
+- Find all the number divisible by 5 between 200 and 300
+
+Solution to Class Problems
+===================================
+
+```{r}
+## Find all the even numbers between 1 and 50
+seq(2,50,2)
+
+## Find all the numbers divisible by 5 between 200 and 300
+seq(200,300,5)
+```
+
+Class Problems
+===================================
+## You got a PPO after summer internship. You attempt a bike-ride from Bangalore to Beneras and plan to gift money to every temple on your way as per your mother's wishes. Every temple you encounter on the road, you pay Rs 101 in the donation box provided you have sufficient money. You started your journey with 12,000 rupees in your moneybag. With all these information find the following using R programming:
+## - How many mandirs you were able to donate money 
+## - What was the average money in your pocket during the trip
+## - How much money you were left with in your moneybag
+
+
+Solution to Part-1 of the Mandir Problem
+==========================================
+```{r}
+## Find the sequence between 12,000 and 0
+
+vMoney = 12000
+vDonate = 101
+
+# Get only the quotient
+nMandirs = vMoney%/%vDonate
+
+print(paste("The total number of Mandirs encountered is",nMandirs))
+```
+
+
+Alternative solution to the Mandir Problem
+============================================
+```{r}
+## Find the sequence between 12,000 and 0
+vMandir = seq(vMoney,0,-vDonate)
+
+## Find the total number of elements in the List
+nMandir = length(vMandir) - 1
+
+print(paste("The total number of Mandirs encountered is",nMandir))
+```
+
+Solution to the Mandir Problem - 2nd part
+============================================
+```{r}
+## Find the sequence between 12,000 and 0
+vMandir = seq(vMoney,0,-vDonate)
+
+## Find the average from total number of elements in the List
+vAVG_Mandir = mean(vMandir)
+
+print(paste("The average amount of money throughout the trip is ",vAVG_Mandir))
+```
+
+Solution to the Mandir Problem - 3rd part
+============================================
+```{r}
+## Find the length of the sequence
+vLength = length(vMandir)
+
+## Find the last element in the list
+vPurse = vMandir[vLength]
+
+print(paste("The amount of money remaining is",vPurse))
+```
+
+
+Alternate solution to the Mandir Problem - 3rd part
+============================================
+```{r}
+## Find the last element in the list
+vPurse = min(vMandir)
+
+print(paste("The amount of money remaining is",vPurse))
+
+```
+
+
+More list operations using R
+===================================
+## Adding a sequence to the List
+
+```{r}
+
+## Adding a sequence to the list
+c(1,3,5,7) + 1:2
+
+## Adding a sequence to the list
+c(2,4,6,8) + 1:4
+
+## Adding a sequence to the list
+c(2,4,6,8) + 1:6
+```
+
+
+More opeartions using R
+===================================
+## Multiplying a Sequence to the List
+
+```{r}
+
+## Multiplying a sequence to the list
+c(1,3,5,7) * 1:2
+
+## Multiplying a sequence to the list
+c(2,4,6,8) * 1:4
+
+## Multiplying a sequence to the list
+c(2,4,6,8) * 1:6
+```
+
+Principles of Data Science with R
+========================================================
+- Declaring variables in R
+
+```{r}
+die1 = 1
+die2 = 2
+die3 = 3
+die4 = 4
+die5 = 5
+die6 = 6
+
+pi = 3.14
+
+institute = "Praxis"
+department = "Data Science"
+```
+
+Example of Mathematical opearations
+========================================================
+```{r, echo=TRUE}
+#Adding the output of the Die
+die1+die2+die3+die4+die5+die6
+
+#Assigning the output of the Die
+myDie = die1+die2+die3+die4+die5+die6
+print(myDie)
+
+#Concatenate the strings
+paste(institute, department, sep=" ")
+
+```
+
+Example of String opearations
+========================================================
+```{r, echo=TRUE}
+
+#Declare a new String
+myInst = paste(institute, department, sep=" loves ")
+print(myInst)
+
+#Length of a String
+nchar(myInst)
+
+```
+
+Example of Assignment opearations
+========================================================
+```{r, echo=TRUE}
+#Assigning value of Die2 to Die1
+die1 = die2
+print(die1)
+
+#Modifying Die2
+die2 = die2*die2
+print(die2)
+
+#Checking output of Die1
+print(die1)
+
+```
+
+
+Example of Logical Opearations
+========================================================
+```{r}
+#Logical operation on Atomic variable
+die_logical = die6>die1
+print(die_logical)
+
+die_logical = die6==die1
+print(die_logical)
+
+```
+
+
+Principles of Data Science with R
+========================================================
+- Understand R list data type
+```{r}
+die1L = c(1,2,3,4,5,6)
+die2L = c(1:6)
+die3L = seq(1,6,1)
+
+print(die1L)
+
+```
+
+
+
+Principles of Data Science with R
+========================================================
+- Simple Opearations on R list data type
+```{r}
+#Find the Sum of the List
+sum(die1L)
+
+#Find the Average of the List
+mean(die1L)
+
+#Find the Median of the List
+median(die1L)
+```
+
+
+Principles of Data Science with R
+========================================================
+- Simple Opearations on R list data type
+```{r}
+#Finding Standard Deviation of Die
+sd(die1L)
+
+#Finding the Correlation between die1 List and die2 List
+cor(die1L,die2L)
+
+```
+
+Example of Logical Opearations on List
+========================================================
+```{r}
+#Logical opeartion on Composite Variable
+die_logical = die2L>die1L
+print(die_logical)
+
+#Logical Operation finding a particular value in the list
+die1L==4
+
+#Logical opeartion finding the position or indices of values in the List
+which(die1L==4|die1L==5)
+```
+
+Example of Aggregation Opearations on List
+========================================================
+```{r}
+#Aggregation on Composite Variable
+length(die1L==4)
+
+#Aggregation on Composite Variable
+sum(die1L==4)
+
+#Aggregation on Composite Variable
+length(which(die1L==4))
+
+```
+
+Principles of Data Science with R
+========================================================
+- Plotting Curve
+```{r,echo=TRUE}
+#Draw Scatter Plot
+plot(die1L*die2L)
+```
+
+Principles of Data Science with R
+========================================================
+- Histogram
+```{r,echo=TRUE}
+#Draw Histogram
+hist(die1L*die2L)
+
+```
+
+Sampling using R
+===================================
+## Sampling with and without replacement
+```{r}
+## Sample of 4 numbers from a List without Replacement
+sample(c(1,3,5,7),size=4,replace = FALSE)
+
+## Sample of 4 numbers from a list with Replacement
+sample(c(1,3,5,7),size=4,replace = TRUE)
+```
+

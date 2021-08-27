@@ -1,0 +1,386 @@
+Statistical Inference with R
+================================================
+We consider real estate data from the city of Ames, Iowa. The details of every real estate transaction in Ames is recorded by the City Assessor's office. Our particular focus for this lab will be all residential home sales in Ames between 2006 and 2010. This collection represents our population of interest. In this lab we would like to learn about these home sales by taking smaller samples from the full population. Let's load the data.
+
+
+Acquire the Data
+================================================
+```{r}
+
+download.file("http://www.openintro.org/stat/data/ames.RData", destfile = "ames.RData")
+load("ames.RData")
+
+```
+
+Getting the necessary information 
+=================================================
+```{r}
+area = ames$Gr.Liv.Area
+price = ames$SalePrice
+
+df_ames = data.frame(area,price)
+
+dim(df_ames)
+```
+
+
+Looking into the Data Distribution
+=================================================
+```{r}
+
+summary(df_ames)
+hist(df_ames$area)
+```
+
+Looking into the Data Distribution
+=================================================
+```{r}
+
+hist(df_ames$area)
+```
+
+Sampling the Data Distribution
+=================================================
+```{r}
+sample_wi_replace50 = sample(df_ames$area, size=50, replace=FALSE)
+
+sample_wo_replace50 = sample(df_ames$area, size=50, replace=TRUE)
+
+```
+
+Sampling the Data Distribution
+=================================================
+```{r}
+print(paste('The mean is ',mean(sample_wi_replace50),' and SD is ',sd(sample_wi_replace50), ' sampling with replacement.'))
+
+print(paste('The mean is ',mean(sample_wo_replace50),' and SD is ',sd(sample_wo_replace50), ' sampling without replacement.'))
+
+```
+
+Sampling from the Data Distribution
+=================================================
+```{r}
+sample_wo_replace50 = rep(NA, 5000)
+
+for(i in 1:5000)
+{
+  samp = sample(df_ames$area, size=50, replace=FALSE)
+  sample_wo_replace50[i] = mean(samp) 
+}
+  
+hist(sample_wo_replace50)
+
+```
+
+Sampling from the Data Distribution
+=================================================
+Showing the histogram with breaks
+```{r}
+hist(sample_wo_replace50, breaks=25)
+
+```
+
+Sampling from the Data Distribution
+=================================================
+```{r}
+sample_wi_replace50 = rep(NA, 5000)
+
+sample_wi_replace50 = replicate(n=5000, mean(sample(df_ames$area, size=50, replace=TRUE)), simplify=TRUE) 
+
+hist(sample_wi_replace50, breaks=25)
+
+```
+
+Drawing multiple Samples
+=================================================
+```{r}
+
+sample_wi_replace10 = replicate(n=5000, mean(sample(df_ames$area, size=10, replace=TRUE)), simplify=TRUE) 
+
+sample_wi_replace100 = replicate(n=5000, mean(sample(df_ames$area, size=100, replace=TRUE)), simplify=TRUE)
+
+sample_wi_replace1000 = replicate(n=5000, mean(sample(df_ames$area, size=1000, replace=TRUE)), simplify=TRUE)
+
+```
+
+Drawing the Graphics
+=================================================
+```{r}
+
+opar = par()
+
+par(mfrow = c(3, 1))
+
+hist(sample_wi_replace10, breaks = 20)
+hist(sample_wi_replace100, breaks = 20)
+hist(sample_wi_replace1000, breaks = 20)
+
+par(opar)
+
+```
+
+Drawing the Graphics
+=================================================
+```{r}
+
+opar = par()
+
+par(mfrow = c(1, 3))
+
+hist(sample_wi_replace10, breaks = 20)
+hist(sample_wi_replace100, breaks = 20)
+hist(sample_wi_replace1000, breaks = 20)
+
+par(opar)
+
+```
+
+
+Confidence Interval
+=================================================
+```{r}
+sampSize = length(sample_wi_replace1000)
+sampSD = sd(sample_wi_replace1000)
+
+SE = sampSD/sqrt(sampSize)
+
+CI_low = sample_wi_replace1000 - 1.96 * SE
+CI_high = sample_wi_replace1000 + 1.96 * SE
+
+```
+
+Confidence Interval Plotting
+=================================================
+```{r}
+plot_ci(CI_low, CI_high, mean(sample_wi_replace1000))
+
+```
+
+North Carolina Births
+=================================================
+```{r}
+print(getwd())
+setwd('D:/R-Data')
+print(getwd())
+
+```
+
+North Carolina Births
+=================================================
+```{r}
+df_birth = read.csv("nc-birth.csv", header=TRUE)
+
+dim(df_birth)
+
+```
+
+
+Variable Description
+================================================
+- fage            father's age in years.
+- mage            mother's age in years.
+- mature 	        maturity status of mother.
+- weeks           length of pregnancy in weeks.
+- premie 	        whether the birth was classified as premature (premie) or full-term.
+- visits 	        number of hospital visits during pregnancy.
+- marital         whether mother is married or not married at birth.
+- gained 	        weight gained by mother during pregnancy in pounds.
+- weight 	        weight of the baby at birth in pounds.
+- lowbirthweight 	whether baby was classified as low birthweight (low) or not (not low).
+- gender 	        gender of the baby, female or male.
+- habit 	        status of the mother as a nonsmoker or a smoker.
+- whitemom 	      whether mom is white or not white
+
+Summary Information
+================================================
+```{r}
+summary(df_birth)
+
+```
+
+Box Plots
+================================================
+```{r}
+by(df_birth$weight, df_birth$habit, mean)
+
+boxplot(weight ~ habit, data = df_birth, xlab='Habit of Individuals',ylab='Weight of Individuals', main='Data of Child birth by parents')
+
+```
+
+Box Plots
+================================================
+```{r}
+
+boxplot(weight ~ habit, data = df_birth, xlab='Habit of Individuals',ylab='Weight of Individuals', main='Data of Child birth by parents', notch=TRUE, varwidth=TRUE, col = c("green","yellow"), names = c("Non-Smoker","Smoker"), horizontal=TRUE, border='purple')
+
+```
+
+Drawing the Confidence Interval
+================================================
+```{r}
+#install.packages("statsr")
+library("statsr")
+
+```
+
+Drawing the Confidence Interval
+================================================
+```{r}
+inference(y = weight, x = habit, data=df_birth, statistic = "mean", type = "ci", null = 0, alternative = "twosided", method = "theoretical")
+
+```
+
+Drawing the Inference
+================================================
+```{r}
+inference(y = weight, x = habit, data=df_birth, type = "ht", statistic = "mean", null = 0, order = c("smoker","nonsmoker"), alternative = "twosided", method = "theoretical")
+
+```
+
+
+Linear Regression
+================================================
+The movie Moneyball focuses on the "quest for the secret of success in baseball". It follows a low-budget team, the Oakland Athletics, who believed that underused statistics, such as a player's ability to get on base, betterpredict the ability to score runs than typical statistics like home runs, RBIs (runs batted in), and batting average. Obtaining players who excelled in these underused statistics turned out to be much more affordable for the team.
+
+In this lab we'll be looking at data from all 30 Major League Baseball teams and examining the linear relationship between runs scored in a season and a number of other player statistics. Our aim will be to summarize these relationships both graphically and numerically in order to find which variable, if any, helps us best predict a team's runs scored in a season.
+
+Loading the Data
+=================================================
+```{r}
+df_moneyball = read.csv("Moneyball.csv", header=TRUE)
+
+dim(df_moneyball)
+
+```
+
+File Structure
+=================================================
+```{r}
+str(df_moneyball)
+```
+
+File Structure
+=================================================
+```{r}
+summary(df_moneyball)
+
+```
+
+Looking at the Scatter Plot
+=====================================
+
+```{r}
+plot(x = df_moneyball$homeruns, y = df_moneyball$wins, xlab="Home Runs", ylab="Wins")
+
+```
+
+Simple Correlation
+=================================================
+```{r}
+cor(df_moneyball$homeruns, df_moneyball$wins)
+
+```
+
+Plotting the Distribution
+=================================================
+```{r}
+plot_ss(x = homeruns, y = wins, data=df_moneyball)
+```
+
+Visualize the Squared Distances
+=================================================
+```{r}
+plot_ss(x = homeruns, y = wins, data=df_moneyball, showSquares = TRUE)
+```
+
+Drawing the Regression Line
+=================================================
+```{r}
+
+regline = lm(wins ~ homeruns, data = df_moneyball)
+
+summary(regline)
+
+```
+
+Prediction and Errors
+=================================================
+```{r}
+
+plot(wins ~ homeruns, data=df_moneyball)
+abline(regline)
+
+```
+
+Note on the Summary obtained
+=====================================
+- Equation of the Regression is Wins = 48.81 + 0.2119*homeruns
+- There is an expected increase in 1 wins for every 5 increase of homeruns
+- Squared correlation between actual and predicted is given by multiple R-square. Model indicates that 43.64% of the variability explained by the model
+- Residual Standard Error of 8.721 indicates the average of the SE in the prediction
+- Because there is only 1 predictor, the p-value of the F-Statistics is synonymous to t-statistic 
+
+More Diagnostic
+=====================================
+```{r}
+
+coef(regline)
+
+unname(coef(regline))
+
+confint(regline)
+
+```
+
+More Diagnostic
+=====================================
+```{r}
+# Looking at the coefficients
+summary(regline)$coef
+
+```
+
+More Diagnostic
+=====================================
+```{r}
+fitted(regline)
+
+residuals(regline)
+
+```
+
+
+Model Diagnostics
+=================================================
+To assess whether the linear model is reliable, we need to check for (1) linearity, (2) nearly normal residuals, and (3) constant variability.
+
+
+Model Linearity
+=================================================
+Linearity: You already checked if the relationship between runs and at-bats is linear using a scatterplot. We should also verify this condition with a plot of the residuals vs. homeruns. 
+```{r}
+
+plot(regline$residuals ~ df_moneyball$homeruns)
+abline(h = 0, lty = 3)  # adds a horizontal dashed line at y = 0
+
+```
+
+Model Normal Residuals
+=================================================
+NOrmality: Look at the Normal Probability Plot
+
+```{r}
+
+qqnorm(regline$residuals)
+qqline(regline$residuals)  # adds diagonal line to the normal prob plot
+
+```
+
+Model Residuals
+=================================================
+```{r}
+opar = par()
+par(mfrow=c(2,2))
+plot(regline)
+par(opar)
+```
