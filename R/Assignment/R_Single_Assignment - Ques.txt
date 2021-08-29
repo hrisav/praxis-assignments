@@ -1,0 +1,17 @@
+Part-1: This part can be completed as a group assignment. Write the group name and the group members. Identical submission expected for a group and members will be given uniform marks for the same (5 marks)
+================================================================================================
+An IVF Hospital Chain with a nationwide capacity of 1000 patients per month and 100 patients per center have been instructed to do annual budget planning. As part of the same, they are analyzing patient footfalls and profits.
+
+The chain follows a package pricing system. They makes $1000 profit per baby born, $200 for a twin, $-1000 for a triplet and $-2000 when it is a quadruplet. It makes no profit when there is a miscarriage.
+
+The average footfall per month follows an uniform distribution between 72 to 84 per center. Analyzing the data from the past, you found there is a 25% chance of twin, 5% chance for a triplet, 1% chance of a quadruplet and 4% chance of miscarriage.
+
+Given the CEO wants a detailed projection on the profits, can you help the IVF chain?
+
+Part-2: This part to be completed as an individual assignment. Submission will be marked separately for the same. Make sure your submission clearly demarks Part-1 and Part-2 (5 marks)
+===============================================================================================
+For the IVF hospital case, conduct a random experiment to come to the profit projection for the year across its 10 centers. Repeat the experiment multiple times to ensure that the output is consistent with lesser variance.
+
+Write logic, identify the data containers, functions and procedures. Make sure that your logic is scalable to any input for the uniform distribution and any changes to the Payoff table. You might consider creating your own function for the same.
+
+The IVF chain has 10 centers and even numbered centers don't have any miscarriages but result in a 9% triplets. How does your result changes?

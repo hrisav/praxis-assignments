@@ -1,0 +1,178 @@
+---
+title: "R_Assignment_Group 5"
+Members: Ananda Chatterjee 
+         Avinash Yadav 
+         Dhruv Sobti 
+         Hrisav Bhowmick 
+         Vineet Kumar
+---
+
+=============================================================================================================================================================================================
+Given:
+      - A IVF Hospital Chain has 1000 patients/month capacity with 100 patients/month per Center so hospital has 10 Centers
+      - Each Center patient footfall follows uniform distribution with footfalls lying between 72 to 84 per center
+      - Hospital makes a profit of $1000 for each baby born, $200 for a twin, $-1000 for a triplet, $-2000 for quadruplet and 0 profit when there is a miscarriage
+      - Probability of baby being born is 65%, for twin - 25%, triplet - 5%, Quadruplet - 1% and for miscarriage it is 4%
+
+Find : Detailed projection of Profits made by IVF chain , Analysis of footfalls , annual Budget(Individual Assignment)
+
+=============================================================================================================================================================================================
+=============================================================================================================================================================================================
+PART 1 - GROUP ASSIGNMENT  :  Profit Projection of Month
+
+
+Solution:
+
+
+Function : with 3 parameters 1st is required , other 2 have default values 
+           Calculating Distribution of Birth, Number of born Babies, Twins, Triplets, Quadruplets and Miscarriages of each IVF Hospital Center.
+           This Function is also calculating Each Center Profit per birth and also total profit from every Center
+```{r}
+
+#function with default values for probability and payoff
+center = function(footfall,probOfBirth=c(0.65,0.25,0.05,0.01,0.04),payoff=c(1000,200,-1000,-2000,0))
+{
+  outcome=c('baby','twin','triplet','quadruplet','miscarriage')                 #different Outcome that each Patient can possibly have
+  
+  #Creating a Distribution of Birth outcome by sampling via the 'outcome', with size = average patient footfalls and probability of birth rates respectively
+  distPerCenter=sample(outcome,footfall,replace = TRUE,prob = probOfBirth)
+  
+  babyCount=sum(distPerCenter=='baby')                                          #Counting no. of babies born
+  twinCount=sum(distPerCenter=='twin')                                          #Counting no. of Twins Born
+  tripletCount=sum(distPerCenter=='triplet')                                    #Counting no. of triplets Born
+  quadrupletCount=sum(distPerCenter=='quadruplet')                              #Counting no. of quadruplets Born
+  miscarriageCount=sum(distPerCenter=='miscarriage')                            #Counting no. of Miscarriages happened
+  
+  #Calculating the Profit or Loss made from each Outcome by multiplying the count of outcomes with respective payoffs
+  profitPerOutcome=c(babyCount,twinCount,tripletCount,quadrupletCount,miscarriageCount)*payoff       
+  profitPerCenter=sum(profitPerOutcome)                                         #Calculating Total Profit made From one center                           
+  
+  #Returning list of Outcome frequency(starting 5 values),Patients coming at the particular center(6th value),Profit made by the Center(7th value) and Distribution of birth outcome(8th value) 
+  return ( list(babyCount,twinCount,tripletCount,quadrupletCount,miscarriageCount,footfall,profitPerCenter,distPerCenter) )
+}
+```
+
+Finding Footfalls of every Center , then calling the center() function to find the baby Outcome for each footfall for every Center
+
+```{r}
+
+distAllCenter=list()                                                            #list to store Distribution From all Centers
+
+cnames = c("Baby","Twin","Triplet","Quadruplet","Miscarriage","Footfall","Total Profit")
+rnames = c(1:10)
+rnames[1:10] = paste("Center -",rnames[1:10])
+#Matrix to store records of All Center with 10 rows for Center and 7 Col. for each outcome(5),footfall(6th),Profit(7th)
+IVFMatrix = matrix(0,byrow=TRUE,nrow=10,ncol=7, dimnames=list(rnames,cnames))      
+
+#Looping 10 times for each center
+for (centrNo in seq(1:10))
+{
+  footfall=round(runif(1,72,84))                                                #Calculating footfall for each center according to given Condition (uniform Distribution between(72-84))
+  centerOutcome=center(footfall)                                                #Calling center() and storing all 8 values returned from the function in the variable 
+  distAllCenter[[paste('Center',centrNo)]]=centerOutcome[[8]]                   #Storing distribution of birth outcome of each center with tag - 'Center 1','Center 2'...'Center 10'
+  
+  #looping for first 7 seven values in the returned list from center()
+  for (value in c(1:7))
+  {
+   IVFMatrix[centrNo,value]=centerOutcome[[value]]                              #filling the Matrix with corresponding returned values from center() 
+  }
+  
+  #Printing Footfall for each center and its Distribution of Births
+  print(paste('Footfall of Center ',centrNo,':',centerOutcome[[6]]))  
+  print(paste('Outcome of Center ',centrNo,':'))
+  print(distAllCenter[[paste('Center',centrNo)]])
+  cat('\n\n')
+  
+}
+
+```
+
+
+```{r}
+#Records Of Each Center
+
+cat("Records of Every Center in a Month\n\n")
+IVFMatrix
+totalProfit=sum(IVFMatrix[,7])                                                  #Calculating Total Profit For a month by summing all values from 7th Column in the records Matrix
+meanProfit=mean(IVFMatrix[,7])                                                  #Mean Profit of a Month   
+sdProfit=round(sd(IVFMatrix[,7]))
+print(paste(cat("\n\n"),'Total Profit of IVF Hospital in a month :',totalProfit,'With average profit in a month :',meanProfit,'with Standard Deviation :',sdProfit))
+
+```
+
+
+
+
+===============================================================================================================================================================================================
+===============================================================================================================================================================================================
+===============================================================================================================================================================================================
+PART 2 - INDIVIDUAL ASSIGNMENT   :  Profit Projection for whole year
+
+                                        - For even numbered centers , no Miscarriages, triplet rate increases to 9%
+                                        - Analysis for each month and Detailed Profit Projection of each Month
+
+```{r}
+distmonth = list()   #distribution of all birth outcomes of all months stored in this list
+vars = list()        #birth Outcomes, footfalls, profit from each center and month stored in this list
+mprofit = c()       #profit from all months is stored in this vector
+cnames = c("Baby","Twin","Triplet","Quadruplet","Miscarriage","Footfall","Total Profit")
+rnames = c(1:10)
+rnames[1:10] = paste("Center -",rnames[1:10])
+monthly_Matrix = matrix(0,byrow=TRUE,nrow=10,ncol=7, dimnames=list(rnames,cnames))        #record of each Month is stored in matrix via loop
+prob_evenCenters=c(0.65,0.25,0.09,0.01,0)     #birth probability for even centers
+prob_oddCenters=c(0.65,0.25,0.05,0.01,0.04)   #birth probability for odd centers
+
+
+for (month in c(1:12))  #looping through each month
+{
+  distAllCenter=list()     #list to store immediate distribution of every center
+  for (centrNo in seq(1:10))
+  {
+    footfall=round(runif(1,72,84))  #this will give a footfall value to each center
+    
+    if(centrNo %% 2==0){
+      centerOutcome=center(footfall,prob_evenCenters)  #store values for even center   
+    }
+    else{
+      centerOutcome=center(footfall,prob_oddCenters)   #store values for odd center 
+    }
+    
+    distAllCenter[[paste('Center',centrNo)]]=centerOutcome[[8]]  #stores distribution of immediate center from returned value
+
+    for (value in c(1:7))     #looping through starting 7 values of returned values
+    {
+     monthly_Matrix[centrNo,value]=centerOutcome[[value]]   #matrix of returned values
+    }
+  }
+  
+  distmonth[[paste('Month',month)]] = distAllCenter[]   #merging all distribution of every center by month in one list 
+  vars[[paste('Month',month)]] = monthly_Matrix   #has all records of center by month in one list 
+  mprofit = append(mprofit,sum(monthly_Matrix[,7]))   #vector has profit of all centers by month
+}
+
+```
+
+
+```{r}
+
+for (month in c(1:12)) #looping through months for output
+{
+  print(paste('Records of Month',month,':'))
+  print(vars[[paste('Month',month)]])
+  print(paste('Profit of Month',month,':',mprofit[month]))
+  cat('\n\n')
+}
+
+```
+
+```{r}
+
+profy=sum(mprofit)           #Total Profit in a Year
+meanpm=mean(mprofit)     #Mean profit in a Year
+sd=round(sd(mprofit))  #Standard Deviation of Profit in a year
+
+print(paste('Yearly Profit the Hospital Chain made:',profy))
+print(paste('Average Profit per month:',round(meanpm, digits=2)))
+print(paste('Standard Deviation:',sd))
+
+```
