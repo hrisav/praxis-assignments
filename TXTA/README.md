@@ -48,3 +48,9 @@ Problem 3
 - Train Test Split
 - LSA (TruncatedSVD) / Word2Vec
 - Logistic Regression model for predicting news classes
+
+Scraped
+-
+
+- Andhra Bank Reviews
+- IMDB Movie Reviews
