@@ -22,3 +22,15 @@ Extra problem
 	
 	
 Entire model building process would carry 35 marks. Last two extra questions will carry 5 marks.
+
+Steps for my Solution
+-
+
+- Getting data and splitting
+- EDA
+- Impute missing values
+- Categorical values encoding
+- Min Max Scaling
+- Model building using Dense network
+- Result interpretation using Confusion Matrix & Classification Report
+- Integrating PCA and comparing result
